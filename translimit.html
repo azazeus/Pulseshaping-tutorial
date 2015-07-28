@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>PSCalc</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="./dataShow.js"></script>
+		<script type="text/javascript" src="./f_interp.js"></script>
+		<script type="text/javascript" src="./wl_to_f.js"></script>
+		<script type="text/javascript" src="./f_to_wl.js"></script>
+		<script type="text/javascript" src="./calc_shg.js"></script>
+		<script type="text/javascript" src="./make_phase_step.js"></script>
+		<script type="text/javascript" src="./make_phase_sin.js"></script>
+		<script type="text/javascript" src="./node_modules/numeric/numeric-1.2.6.min.js"></script>
+		<style type="text/css">
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				stroke-width: 2px;
+				shape-rendering: crispEdges;
+			}
+			.background {
+				fill: #e7e7e7;
+			}
+			.axis text {
+				font-family: sans-serif;
+				font-size: 20px;
+			}
+			.xlabel text {
+				font-family: sans-serif;
+				font-size: 20px;
+			}
+			.ylabel text {
+				font-family: sans-serif;
+				font-size: 20px;
+			}
+			.line {
+				fill: none;
+				stroke: red;
+				stroke-width: 1.5px;
+			}
+			.my-Wrapper-class {
+				width:900px;
+				margin:0px auto;
+			}
+			.flex-slider {
+				float:left;
+				width:300px;
+				font-family: sans-serif;
+				font-size: 20px;
+			}
+			.mesg{
+				font-family: sans-serif;
+				font-size: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="maincontainer" align="center">
+		<script type="text/javascript">
+			
+			var c=3e6;
+			var f_max=20000;
+			var npoints=2000;
+			var f_mult=f_max/npoints;
+			var t_sig=[];
+			var f_real = [];
+			var f_imag = [];
+			var svg1 = d3.select("#maincontainer")
+				.append("svg");
+			var svg2 = d3.select("#maincontainer")
+				.append("svg");
+			var g_spec = [];
+			var g_spec_norm=[];
+			var phase=[];
+			var bw_disp =[];
+			var sigma = 240;//400;
+			for (var i=0;i<npoints;i++){
+				phase[i]=0;
+				g_spec[i]=Math.exp(-Math.pow(i*f_mult-3750,2)/(2*Math.pow(sigma,2)));
+				g_spec_norm[i]=g_spec[i]/(Math.sqrt(2*Math.PI)*sigma);
+			}
+			for (var i=0;i<3000/f_mult;i++){
+				bw_disp[i]=[c/(i*f_mult+2500),g_spec[i+Math.floor(2500/f_mult)]*Math.sqrt(c)/(i*f_mult+2500)];
+			}
+			//show the raw data
+			plot2d(450,376,svg1,bw_disp,"E. field", "wavelength [nm]");
+			
+			//real and imaginary parts of the field
+			f_real = numeric.mul(g_spec_norm, numeric.cos(phase));
+			f_imag = numeric.mul(g_spec_norm, numeric.sin(phase));
+			
+			// construct the complex E field for Fourier transform
+			g_pulse=(new numeric.T(f_real,f_imag)).fft();
+			
+			t_size=Math.ceil(npoints/(sigma/f_mult));
+			for (var i=0;i<t_size;i++){
+				t_sig[i]=[(i-t_size),g_pulse.x[npoints-t_size+i]];				
+			}
+			for (var i=0;i<t_size;i++){
+				t_sig[i+t_size]=[(i),g_pulse.x[i]];				
+			}
+			
+			plot2d(450,376,svg2,t_sig,"E. field","time [fs]");
+			
+			function bw_update() {
+				var x = document.getElementById("bw_select");
+				document.getElementById("tx1").innerHTML = x.value+" THz";
+				var y = document.getElementById("so_select");
+				document.getElementById("tx2").innerHTML = y.value+" fs<sup>2</sup>";
+				var z = document.getElementById("to_select");
+				document.getElementById("tx3").innerHTML = z.value+" fs<sup>3</sup>";
+				sigma=x.value;
+				// define phase array
+				var so_offset = -2000;
+				var to_offset = 10000;
+				if (+y.value == 2000){
+					if (+z.value == -10000){
+						document.getElementById("mesg_div").innerHTML = "The pulse is currently transform-limited!";
+					}else{
+					document.getElementById("mesg_div").innerHTML = " ";
+					}	
+				}else{
+					document.getElementById("mesg_div").innerHTML = " ";
+				}
+				for (var i=0;i<npoints;i++){
+				phase[i]=(Number(y.value)-2000)*1e-8*Math.pow((i*f_mult-3750),2)
+				+(Number(z.value)+10000)*1e-12*Math.pow((i*f_mult-3750),3);
+				g_spec[i]=Math.exp(-Math.pow(i*f_mult-3750,2)/(2*Math.pow(sigma,2)));
+				g_spec_norm[i]=g_spec[i]/(Math.sqrt(2*Math.PI)*sigma);
+				}
+				for (var i=0;i<3000/f_mult;i++){
+					bw_disp[i]=[c/(i*f_mult+2500),g_spec[i+Math.floor(2500/f_mult)]*Math.sqrt(c)/(i*f_mult+2500)];
+				}
+				//show the raw data
+				plot2d_update(450,376,svg1,bw_disp,"E. field", "wavelength [nm]");
+				
+				//real and imaginary parts of the field
+				f_real = numeric.mul(g_spec_norm, numeric.cos(phase));
+				f_imag = numeric.mul(g_spec_norm, numeric.sin(phase));
+				
+				// construct the complex E field for Fourier transform
+				g_pulse_loc=(new numeric.T(f_real,f_imag)).fft();
+				
+				t_size=Math.ceil((npoints*f_mult)*(1+0*(4*Math.log(2)*Math.abs(y.value)*1e-8*sigma*sigma))/sigma);
+				
+				var t_sig_loc=[];
+				for (var i=0;i<t_size;i++){
+					t_sig_loc[i]=[(i-t_size),g_pulse_loc.x[npoints-t_size+i]];				
+				}
+				for (var i=0;i<t_size;i++){
+					t_sig_loc[i+t_size]=[(i),g_pulse_loc.x[i]];				
+				}
+				plot2d_update(450,376,svg2,t_sig_loc,"E. field","time [fs]");
+			}
+			
+		</script>
+		<div class="my-Wrapper-class">
+			<div class="flex-slider">
+				<p>
+				Bandwidth
+				</p>
+				20
+				<input id="bw_select" type="range" min="10", max="400" step="10" oninput="bw_update()" list="bwsteplist">
+				<datalist id="bwsteplist">
+					<option>0</option>
+					<option>20</option>
+					<option>40</option>
+					<option>60</option>
+					<option>80</option>
+					<option>120</option>
+					<option>240</option>
+					<option>360</option>
+					<option>400</option>
+				</datalist>
+				</input>
+				400	
+				<p id="tx1" >240 THz
+				</p>
+			</div>
+			<div class="flex-slider">
+				<p>
+				Group-delay dispersion
+				</p>
+				-5000
+				<input id="so_select" type="range" min="-5000", max="5000" step="100" oninput="bw_update()" list="sosteplist">
+				<datalist id="sosteplist">
+					<option>-5000</option>
+					<option>-4000</option>
+					<option>-3000</option>
+					<option>-2000</option>
+					<option>-1000</option>
+					<option>0</option>
+					<option>1000</option>
+					<option>2000</option>
+					<option>3000</option>
+					<option>4000</option>
+					<option>5000</option>
+				</datalist>
+				</input>
+				5000			
+				<p id="tx2" >0 fs<sup>2</sup>
+				</p>
+			</div>
+			<div class="flex-slider">
+				<p>
+				Third order dispersion
+				</p>
+				-50000
+				<input id="to_select" type="range" min="-50000.0", max="50000.0" step="1000.0" oninput="bw_update()" list="tosteplist">
+				<datalist id="tosteplist">
+					<option>-50000.0</option>
+					<option>-40000.0</option>
+					<option>-30000.0</option>
+					<option>-20000.0</option>
+					<option>-10000.0</option>
+					<option>0.0</option>
+					<option>10000.0</option>
+					<option>20000.0</option>
+					<option>30000.0</option>
+					<option>40000.0</option>
+					<option>50000.0</option>
+				</datalist>
+				</input>
+				50000			
+				<p id="tx3" >0 fs<sup>3</sup>
+				</p>
+			</div>
+		</div>	
+		<div class = "mesg" id="mesg_div">
+		</div>
+		</div>
+	</body>
+</html>

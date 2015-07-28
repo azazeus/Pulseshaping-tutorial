@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>PSCalc</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="./dataShow.js"></script>
+		<script type="text/javascript" src="./f_interp.js"></script>
+		<script type="text/javascript" src="./wl_to_f.js"></script>
+		<script type="text/javascript" src="./f_to_wl.js"></script>
+		<script type="text/javascript" src="./calc_shg.js"></script>
+		<script type="text/javascript" src="./make_phase_step.js"></script>
+		<script type="text/javascript" src="./make_phase_sin.js"></script>
+		<script type="text/javascript" src="./node_modules/numeric/numeric-1.2.6.min.js"></script>
+		<style type="text/css">
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				stroke-width: 2px;
+				shape-rendering: crispEdges;
+			}
+			.background {
+				fill: #FFFFDD;
+			}
+			.axis text {
+				font-family: sans-serif;
+				font-size: 20px;
+			}
+			.xlabel text {
+				font-family: sans-serif;
+				font-size: 20px;
+			}
+			.ylabel text {
+				font-family: sans-serif;
+				font-size: 20px;
+			}
+			.line {
+				fill: none;
+				stroke: red;
+				stroke-width: 1.5px;
+			}
+			.bar {
+				fill: steelblue;
+			}
+			.pbar {
+				fill: green;
+			}
+			.pline {
+				stroke: gray;
+				stroke-width:2px;
+			}
+			.rline {
+				stroke: orange;
+				stroke-width:4px;
+			}
+			.myslider {
+				float:left;
+				width:450px;
+				font-size:20px;
+				font-family:sans-serif;
+			}
+			.my-Wrapper-class {
+				width:900px;
+				margin:0px auto;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="maincontainer" align="center">
+		<script type="text/javascript">
+			
+			var c=3e6;
+			var f_max=20000;
+			var npoints=500;
+			var f_mult=f_max/npoints;
+			var lmargin=40;
+			var bmargin=40;
+			var gh=400;
+			var gw=450;
+			
+			var barPadding=1;
+			var phase_off=0.4;
+			var ph_shape="sinusoidal";
+			var svg1 = d3.select("#maincontainer")
+				.append("svg")
+				.attr("height",gh)
+				.attr("width",gw);
+			var svg2 = d3.select("#maincontainer")
+				.append("svg")
+				.attr("height",gh)
+				.attr("width",gw);
+			
+			var g_spec = [];
+			var g_ph=[];
+			
+			var bw_disp =[];
+			var ph_disp =[];
+			var c_disp =[];
+			var c_tot=[];
+			var sigma = 400;//400;
+			for (var i=0;i<npoints;i++){
+			
+				g_spec[i]=Math.exp(-Math.pow(i*f_mult-3750,2)/(2*Math.pow(sigma,2)));
+				
+			}
+			for (var i=0;i<3000/f_mult;i++){
+				bw_disp[i]=[i*f_mult+2500,40*g_spec[i+Math.floor(2500/f_mult)]];
+			}
+			var cent_bar=24;
+			
+			svg2.selectAll("circle")
+				.data([150]).enter()
+				.append("circle")
+				.attr("cx",function(d,i){
+					return gw/2;
+				})
+				.attr("cy",function(d,i){
+					return gh/2;
+				})
+				.attr("r",function(d,i){
+					return 150;
+				})
+				.attr("fill","none")
+				.attr("stroke","black");
+			var deg_txt = [
+				[gw/2+150, gh/2, "0",10],
+				[gw/2-150, gh/2, '\u03C0',-20],
+				[gw/2, gh/2-160, "\u03C0/2",-10],
+				[gw/2, gh/2+160, "-\u03C0/2",-10]				
+			];
+			ctext=svg2.selectAll("text");
+			ctext
+				.data(deg_txt).enter()
+				.append("svg:text")
+				.style("fill","black")
+				.attr("x",function (d,i) {return d[0];})
+				.attr("y",function (d,i) {return d[1];})
+				.attr("dx", function (d,i) {return d[3];})
+				.attr("dy", ".35em")
+				.attr("font-size","20")
+				.attr("font-family","serif")
+				.text(function (d,i) {return d[2];})
+				
+				
+			svg1.selectAll(".bar")
+				.data(bw_disp)
+				.enter()
+				.append("rect")
+				.attr("class","bar")
+				.attr("x", function(d, i) {
+					return i * (gw / bw_disp.length)+lmargin;
+				})
+				.attr("id", function(d,i){
+					return "b"+i;
+				})
+				.attr("y", function(d) {
+					return gh - (d[1] * 4)-150 - bmargin;
+				})
+				.attr("width", gw / bw_disp.length - barPadding)
+				.attr("height", function(d) {
+					return d[1] * 4;
+				})
+				.on("mousedown",function(){
+					d3.selectAll(".bar").style("fill","steelblue");
+					d3.select(this).style("fill","black");
+					cent_bar=Number((d3.select(this).attr("id")).slice(1,(d3.select(this).attr("id")).length));
+					ph_update();
+				})
+				.on("mouseover",function(){
+					if (cent_bar>0){
+						var idx = Number((d3.select(this).attr("id")).slice(1,(d3.select(this).attr("id")).length));
+						d3.select("#b"+String(idx)).style("fill","red");
+						d3.select("#l"+String(idx)).style("stroke","red").style( "stroke-width","4");
+						d3.select("#b"+String(2*cent_bar-idx)).style("fill","red");
+						d3.select("#l"+String(2*cent_bar-idx)).style("stroke","red").style( "stroke-width","4");
+					}
+				})
+				.on("mouseout",function(){
+					d3.selectAll(".bar").style("fill","steelblue");
+					d3.selectAll(".pline").style("stroke","gray").style( "stroke-width","2");
+					if (cent_bar>0){
+						d3.select("#b"+String(cent_bar)).style("fill","black");
+					}
+				});
+			svg1.selectAll("text")
+				.data([[gw/2-lmargin,gh-150,"Frequency",0],
+						[lmargin/2+5,(gh/2-150/2),"E. field",-90],
+						[lmargin/2+5,(gh-150/2)+20,"phase",-90]])
+				.enter().append("text")
+				.attr("text-anchor", "center")
+				//.attr("x",function(d){return d[0];})
+				//.attr("y",function(d){return d[1];})
+				.attr("transform",function(d){ 
+					return "translate("+ d[0] +","+ d[1] + ") rotate("+ +d[3] + ")";})
+				.attr("font-size","20")
+				.attr("font-family","sans-serif")
+				//.attr("transform", function(d){return ;})
+				.text(function(d){return d[2];})
+				
+			d3.select("#b"+String(cent_bar)).style("fill","black");
+			ph_update();
+			
+			
+			function ph_update() {
+				var ph_rep=400;
+				if(ph_shape=="sinusoidal"){
+					console.log("making sin");
+					for (var i=0;i<npoints;i++){
+						g_ph[i]=Math.PI*Math.sin(phase_off+(i-cent_bar-Math.floor(2500/f_mult))*f_mult/ph_rep);
+					}
+				}
+				if(ph_shape=="random"){
+					console.log("making random");
+					for (var i=0;i<npoints;i++){
+						g_ph[i]=Math.PI*(2*Math.random(phase_off+(i-cent_bar-Math.floor(2500/f_mult))*f_mult/ph_rep)-1);
+					}
+				}
+				for (var i=0;i<3000/f_mult;i++){
+					ph_disp[i]=[c/(i*f_mult+2500),g_ph[i+Math.floor(2500/f_mult)]];
+				}
+				c_tot=[[0,0]];
+				for (var i=0;i<3000/f_mult;i++){			
+				c_disp[i]=[
+				g_spec[2*cent_bar-i+Math.floor(2500/f_mult)]*
+				g_spec[i+Math.floor(2500/f_mult)]*Math.cos(g_ph[i+Math.floor(2500/f_mult)]+g_ph[2*cent_bar-i+Math.floor(2500/f_mult)])*1000,
+				g_spec[2*cent_bar-i+Math.floor(2500/f_mult)]*
+				g_spec[i+Math.floor(2500/f_mult)]*Math.sin(g_ph[i+Math.floor(2500/f_mult)]+g_ph[2*cent_bar-i+Math.floor(2500/f_mult)])*1000
+				];
+				c_tot[0][0]=c_tot[0][0]+c_disp[i][0];
+				c_tot[0][1]=c_tot[0][1]+c_disp[i][1];
+				}
+				
+				var phasebar = svg1.selectAll(".pbar");
+				phasebar
+				.data(ph_disp,function(d) { return d; })
+				.enter()
+				.append("rect")
+				.attr("class","pbar")
+				.attr("x", function(d, i) {
+					return i * (gw / ph_disp.length)+lmargin;
+				})
+				.attr("id", function(d,i){
+					return "pb"+i;
+				})
+				.attr("y", function(d) {
+					if (d[1]>0){
+						return gh - 75 - (d[1]/Math.PI*50);
+					}else{
+						return gh - 75 ;
+					}
+				})
+				.attr("width", gw / ph_disp.length - barPadding)
+				.attr("height", function(d) {
+					return Math.abs(d[1]/Math.PI*50);
+				});
+				phasebar.data([])
+				.exit()
+				.remove();
+				
+				var phasor = svg2.selectAll("line");
+				phasor
+				.data(c_disp,function(d) { return d; }).enter()
+				.append("line")
+				.attr("class","pline")
+				.attr("id",function(d,i) {
+					return "l"+i;
+				})
+				.attr("x1",function(d,i){
+					return gw/2;
+				})
+				.attr("y1",function(d,i){
+					return gh/2;
+				})
+				.attr("x2",function(d,i){
+					return gw/2+d[0]/15;
+				})
+				.attr("y2",function(d,i){
+					return gh/2+d[1]/15;
+				});
+				phasor.data([])
+				.exit()
+				.remove();
+				
+				var phas_tot = svg2.selectAll("rline");
+				phas_tot
+				.data(c_tot).enter()
+				.append("line")
+				.attr("class","rline")
+				.attr("x1",function(d,i){
+					return gw/2;
+				})
+				.attr("y1",function(d,i){
+					return gh/2;
+				})
+				.attr("x2",function(d,i){
+					return gw/2+d[0]*150/(36*npoints);
+				})
+				.attr("y2",function(d,i){
+					return gh/2+d[1]*150/(36*npoints);
+				});
+				phas_tot.data([])
+				.exit()
+				.remove();
+			}
+			function off_update(){
+				var slider=document.getElementById("bw_select");
+				document.getElementById("tx1").innerHTML = slider.value+" Radians";
+				if (phase_off != slider.value){
+					phase_off = Number(slider.value);
+					ph_update();
+				}
+			}
+			function shp_update(){
+				
+				document.getElementById("tx2").innerHTML = document.querySelector('input[name="ph_s"]:checked').value;
+				if (ph_shape != document.querySelector('input[name="ph_s"]:checked').value){
+					ph_shape = document.querySelector('input[name="ph_s"]:checked').value;
+					console.log("Now set: " +ph_shape);
+					ph_update();
+				}
+			}
+		</script>
+		<div class="my-Wrapper-class">
+			<div class = "myslider" height="100">
+				<p> 
+				Select phase distribution
+				</p>
+				<input name="ph_s"  type="radio" onclick="shp_update()" value="random">random <br>
+				<input name="ph_s"  type="radio" onclick="shp_update()" value="sinusoidal" checked="checked">sinusoidal<br>
+				</input>
+				<p id="tx2" >sinusoidal
+				</p>
+			</div>
+			<div class = "myslider" height="100" >
+				<p> 
+				Select offset of spectal phase
+				</p>
+				-3.14
+				<input id="bw_select" type="range" min="-3.14", max="3.14" step="0.02" oninput="off_update()" list="bwsteplist">
+				<datalist id="bwsteplist">
+					<option>-3.14</option>
+					<option>-1.58</option>
+					<option>0</option>
+					<option>1.58</option>
+					<option>3.14</option>
+				</datalist>
+				</input>
+				3.14
+				<p id="tx1" >0.4 Radians
+				</p>
+			</div>
+		</div>
+	</body>
+</html>

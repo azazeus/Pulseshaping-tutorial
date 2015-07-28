@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>PSCalc</title>
+		<script type="text/javascript" src="d3/d3.min.js"></script>
+		<script type="text/javascript" src="./dataShow.js"></script>
+		<script type="text/javascript" src="./f_interp.js"></script>
+		<script type="text/javascript" src="./wl_to_f.js"></script>
+		<script type="text/javascript" src="./f_to_wl.js"></script>
+		<script type="text/javascript" src="./calc_shg.js"></script>
+		<script type="text/javascript" src="./make_phase_step.js"></script>
+		<script type="text/javascript" src="./make_phase_sin.js"></script>
+		<script type="text/javascript" src="./node_modules/numeric/numeric-1.2.6.min.js"></script>
+		<style type="text/css">
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				stroke-width: 2px;
+				shape-rendering: crispEdges;
+			}
+			.background {
+				fill: #e7e7e7;
+			}
+			.axis text {
+				font-family: sans-serif;
+				font-size: 20px;
+			}
+			.xlabel text {
+				font-family: sans-serif;
+				font-size: 20px;
+			}
+			.ylabel text {
+				font-family: sans-serif;
+				font-size: 20px;
+			}
+			.line {
+				fill: none;
+				stroke: red;
+				stroke-width: 1.5px;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//global variable
+			var dataset;
+			var c=3e6;
+			var wavel;
+			var int_wavel;
+			var freq_to_interp=[];
+			var spec_int_f=[];
+			var freq_clip=[];
+			var dat_holder=[];
+			var spec_interp=[];
+			var interp_spec_to_plot = [];
+			var spec_int_phase =[];
+			var phase_step_loc=850;
+			var phase_rep=500;
+			var sin_amp=2*Math.PI;
+			var freq=[];
+			var spec_f = [];
+			var sh_spec_int=[];
+			var f_real = [];
+			var f_imag = [];
+			var phase_to_plot = [];
+			var phase_interp =[];
+			for (var i=0;i<10000;i++){
+				freq.push(i);
+				spec_f.push(0);
+				spec_int_phase.push(0);
+			}
+			
+			var svg1 = d3.select("body")
+				.append("svg");
+			var svg2 = d3.select("body")
+				.append("svg");
+			var svg3 = d3.select("body")
+				.append("svg");
+			//read in the data
+			d3.csv("http://localhost:8888/Calib_Venteon_spec_TE.txt", function(data) {
+				dataset=data.map(function(d){
+					return [ +d["wl"],Number(d["int"]) ]; 
+				});
+				wavel=data.map(function(d){
+					return  +d["wl"]; 
+				});
+				int_wavel=data.map(function(d){
+					return Math.sqrt(Number(d["int"])) ; 
+				});
+				//show the raw data
+				plot2d(400,376,svg1,dataset,"Intensity", "Wavelength [nm]");
+				
+				// get the frequency range and frequency vector
+				dat_holder=f_interp(wavel);
+				freq_to_interp=dat_holder[0]; //equispaced frequency array
+				freq_clip=dat_holder[1].reverse();//wavelength array as frequency 
+				
+				// spectral electric field as a function of frequency
+				// corrected for the Jacobian
+				spec_int_f=wl_to_f(wavel,int_wavel).reverse(); 
+				
+				// interpolate the field information to make it equispaced 
+				// over the range spanned by freq_to_interp 
+				spec_interp=numeric.spline(freq_clip,spec_int_f,0,0).at(freq_to_interp);
+				phase_interp=make_phase_sin(freq_to_interp,phase_step_loc,phase_rep,sin_amp);
+				// splice this into the spectral field array from 0 to 1e15
+				for (var i=0;i<freq_to_interp.length;i++){
+					spec_f[freq_to_interp[i]]=spec_interp[i];
+					spec_int_phase[freq_to_interp[i]]=phase_interp[i];
+				}
+				
+				
+				for (var i=0;i<freq_to_interp.length;i++){
+					phase_to_plot[i]=[3e6/freq_to_interp[i],spec_int_phase[freq_to_interp[i]]];
+				}
+				plot2d(400,376,svg2,phase_to_plot,"Phase","Wavelength [nm]");
+				//real and imaginary parts of the field
+				f_real = numeric.mul(spec_f, numeric.cos(spec_int_phase));
+				f_imag = numeric.mul(spec_f, numeric.sin(spec_int_phase));
+				
+				// construct the complex E field for Fourier transform
+				sh_spec_int=calc_shg(f_real,f_imag);
+				
+				for (var i=0;i<4000;i++){
+					interp_spec_to_plot[i]=[3e6/freq[5000+i],sh_spec_int.x[5000+i]*Math.sqrt(c/(freq[5000+i]*freq[5000+i]))];
+				}
+				plot2d(400,376,svg3,interp_spec_to_plot,"Intensity","Wavelength [nm]");
+			})
+			function ph_update() {
+				var x = document.getElementById("wl_select");
+				document.getElementById("slider1_text").value = x.value;
+				var y = document.getElementById("rep_select");
+				document.getElementById("slider2_text").value = y.value;
+				var z = document.getElementById("amp_select");
+				document.getElementById("amp_slider_text").value = z.value;
+				
+				phase_step_loc=c/x.value;
+				// define phase array
+				phase_interp=make_phase_sin(freq_to_interp,x.value,y.value,z.value);
+				for (var i=0;i<freq_to_interp.length;i++){
+					spec_int_phase[freq_to_interp[i]]=phase_interp[i];
+				}
+				for (var i=0;i<freq_to_interp.length;i++){
+					phase_to_plot[i]=[3e6/freq_to_interp[i],spec_int_phase[freq_to_interp[i]]];
+				}
+				plot2d_update(400,376,svg2,phase_to_plot,"Phase","Wavelength [nm]");
+				
+				f_real = numeric.mul(spec_f, numeric.cos(spec_int_phase));
+				f_imag = numeric.mul(spec_f, numeric.sin(spec_int_phase));
+				
+				// construct the complex E field for Fourier transform
+				sh_spec_int=calc_shg(f_real,f_imag);
+				
+				for (var i=0;i<4000;i++){
+					interp_spec_to_plot[i]=[3e6/freq[5000+i],sh_spec_int.x[5000+i]*Math.sqrt(c/(freq[5000+i]*freq[5000+i]))];
+				}
+				plot2d_update(400,376,svg3,interp_spec_to_plot,"Intensity","frequency");
+			}
+		</script>
+		
+		<div>
+			<g>
+				<input id="amp_select" type="range" min="0", max="6.28" step="0.1" onclick="ph_update()" list="ampsteplist"> Selected amplitude =
+				<datalist id="ampsteplist">
+				<option>0</option>
+				<option>1</option>
+				<option>2</option>
+				<option>3</option>
+				<option>4</option>
+				<option>5</option>
+				<option>6</option>
+				<option>6.28</option>
+				</datalist>
+				</input>
+			</g>
+			<g>
+				<input type="text" id ="amp_slider_text" value="6.28" > radians</input>
+			</g>
+		</div>
+		<div>
+			<g>
+				<input id="wl_select" type="range" min="750", max="950" step="10" onclick="ph_update()" list="steplist"> Selected center wavelength = 
+				<datalist id="steplist">
+				<option>750</option>
+				<option>800</option>
+				<option>850</option>
+				<option>900</option>
+				<option>950</option>
+				</datalist>
+				</input>
+			</g>
+			<g>
+				<input type="text" id ="slider1_text" value="850" > nm</input>
+			</g>
+		</div>
+		<div>
+			<g>
+				<input id="rep_select" type="range" min="300", max="600" step="10" onclick="ph_update()" list="step2list"> Selected sinusoid length = 
+				<datalist id="step2list">
+				<option>300</option>
+				<option>350</option>
+				<option>400</option>
+				<option>450</option>
+				<option>500</option>
+				<option>550</option>
+				<option>600</option>
+				</datalist>
+				</input>
+			</g>
+			<g>
+				<input type="text" id ="slider2_text" value="600" > nm</input>
+			</g>
+		</div>
+	</body>
+</html>
