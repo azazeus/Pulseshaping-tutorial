@@ -206,7 +206,7 @@
 			
 			function fetch_venteon(){
 				//read in the data
-				d3.csv("./Calib_Venteon_spec_TE.txt", function(data) {
+				d3.csv("Calib_Venteon_spec_TE.txt", function(data) {
 					dataset=data.map(function(d){
 						return [ +d["wl"],Number(d["int"]) ]; 
 					});
