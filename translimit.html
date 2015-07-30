@@ -21,7 +21,7 @@
 				shape-rendering: crispEdges;
 			}
 			.background {
-				fill: #e7e7e7;
+				fill: #fff7f7;
 			}
 			.axis text {
 				font-family: sans-serif;
@@ -102,7 +102,7 @@
 				t_sig[i+t_size]=[(i),g_pulse.x[i]];				
 			}
 			
-			plot2d(450,376,svg2,t_sig,"E. field","time [fs]");
+			plot2d_fixy(450,376,svg2,t_sig,"E. field","time [fs]",-0.11,0.11);
 			
 			function bw_update() {
 				var x = document.getElementById("bw_select");
@@ -152,7 +152,7 @@
 				for (var i=0;i<t_size;i++){
 					t_sig_loc[i+t_size]=[(i),g_pulse_loc.x[i]];				
 				}
-				plot2d_update(450,376,svg2,t_sig_loc,"E. field","time [fs]");
+				plot2d_fixy_up(450,376,svg2,t_sig_loc,"E. field","time [fs]",-0.11,0.11);
 			}
 			
 		</script>

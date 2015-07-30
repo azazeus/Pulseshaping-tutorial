@@ -5,7 +5,6 @@
 		<title>Pulseshaping tutorial</title>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="./dataShow.js"></script>
-		<script type="text/javascript" src="./f_interp.js"></script>
 		<script type="text/javascript" src="./wl_to_f.js"></script>
 		<script type="text/javascript" src="./f_to_wl.js"></script>
 		<script type="text/javascript" src="./calc_shg.js"></script>
@@ -68,6 +67,12 @@
 				align:center;
 				font-size:12;
 			}
+			iframe{
+				background:#EEEEEE;
+				border-style:none;
+				padding: 0px 0px 0px 0px;
+				border-radius:20px;
+			}
 		</style>
 	</head>
 	<body>
@@ -77,22 +82,22 @@
 		</div>
 		<div>
 			<p>
-			A broadband laser such as a mode-locked Ti:Sapphire laser[ref] can generate pulses that are as short as a few femtoseconds in duration. The pulse duration of the laser and the corresponding bandwidth of the pulse are related via a Fourier transform[ref]. The shorter the pulse, the larger the bandwidth and higher the number of laser modes that need to be supported by the laser cavity (A laser mode is defined as a electromagnetic field distribution with a distinct frequency and polarization). Having a large bandwidth is necessary, but not sufficient to generate a short pulse. 
+			A broadband laser such as a mode-locked <a href="https://en.wikipedia.org/wiki/Ti-sapphire_laser"> Ti:Sapphire laser</a> can generate pulses that are as short as a few femtoseconds in duration. The pulse duration of the laser and the corresponding bandwidth of the pulse are related via a <a href="https://en.wikipedia.org/wiki/Fourier_transform">Fourier transform</a>. The shorter the pulse, the larger the bandwidth and higher the number of laser modes that need to be supported by the laser cavity (A laser mode is defined as a electromagnetic field distribution with a distinct frequency and polarization). Having a large bandwidth is necessary, but not sufficient to generate a short pulse. 
 			</p>
 			<p>
-			Each laser mode can be thought of as a separate continuous-wave laser with a distinct phase[ref]. To generate a pulse, the electric fields of all the laser modes need to add constructively such that the instantaneous field generated is large and the laser outputs a pulse of light. This process is called mode-locking and is achieved by adjusting the individual phases judiciously. To get the shortest pulse, the relative phase difference between any two laser modes should be proportional to the difference in their frequencies and the resulting pulse that is generated is called the transform-limited pulse. This phase described as a function of light frequency is called spectral phase.
+			Each laser mode can be thought of as a separate continuous-wave laser with a distinct <a href="https://en.wikipedia.org/wiki/Phase_(waves)">phase</a>. To generate a pulse, the electric fields of all the laser modes need to add constructively such that the instantaneous field generated is large and the laser outputs a pulse of light. This process is called mode-locking[ref] and is achieved by adjusting the individual phases judiciously. To get the shortest pulse, the relative phase difference between any two laser modes should be linearly proportional to the difference in their frequencies and the resulting pulse that is generated is called the transform-limited pulse. This phase described as a function of light frequency is called spectral phase.
 			</p>
 			<p >
-			More rigorously, spectral phase \(\phi(\omega)\) at an arbitrary frequency \(\omega\) may be defined with respect to the central frequency \(\omega_0\) in terms of a Taylor series[ref] as follows: 
+			More rigorously, spectral phase \(\phi(\omega)\) at an arbitrary frequency \(\omega\) may be defined with respect to the central frequency \(\omega_0\) in terms of a <a href="https://en.wikipedia.org/wiki/Taylor_series"> Taylor series </a> as follows: 
 			</p> 
 			<p class="equation">
 			$$\phi(\omega) = \phi(\omega_0) + \frac{d \phi}{d \omega} (\omega - \omega_0) + \frac{1}{2!} \frac{d^2 \phi}{d \omega^2} (\omega - \omega_0)^2 + \frac{1}{3!}\frac{d^3 \phi}{d \omega^3} (\omega - \omega_0)^3 + \ldots$$
 			</p>
 			<p>
-			In this notation, a spectral phase of arbitrary complexity can be described. The first term on the right hand side shifts the overall phase of the pulse, while the second term results in a shift in the pulse location along the time axis (hence also called group delay). Together, these terms have no effect on the pulse width which remains transform-limited. The terms that are of interest to us, with respect to pulse-shaping, are the third, fourth and higher-order terms. For example, the third term is called the second-order or quadratic phase and will stretch the pulse in the time domain. The corresponding derivative is called second-order dispersion (and sometimes group-delay dispersion or GDD). Similarly, for the higher order terms we get cubic phase, quartic phase, etc. and the derivatives are accordingly third-order dispersion, fourth-order dispersion, etc. These higher-order phases will also distort the pulse in time in addition to lengthening its duration, as we will see below.
+			Using this notation, a spectral phase of arbitrary complexity can be described. The first term on the right hand side shifts the overall phase of the pulse, while the second term results in a shift in the pulse location along the time axis (hence also called 'group delay'). Together, these terms have no effect on the pulse width which remains transform-limited. The terms that are of interest to us, with respect to pulse-shaping, are the third, fourth and higher-order terms. For example, the third term is called the second-order or quadratic phase and will stretch the pulse in the time domain. The corresponding derivative is called second-order dispersion (and sometimes group-delay dispersion or GDD) and is usually expressed in terms of \(\mathrm{fs}^2\) which we will use here (other definitions are possible - see <a href="http://www.newport.com/The-Effect-of-Dispersion-on-Ultrashort-Pulses/602091/1033/content.aspx">here</a> for a great reference). Similarly, for the higher order terms we get cubic phase, quartic phase, etc. and the derivatives are accordingly third-order dispersion \((\mathrm{fs}^3)\), fourth-order dispersion \((\mathrm{fs}^4)\), etc. These higher-order phases will also distort the pulse in time in addition to lengthening its duration, as we will see below.
 			</p>
 		</div>
-		<iframe frameborder="0" width="900px"  height="600px" marginwidth="0" marginheight="0" scrolling="no" src="./translimit.html" kwframeid="1" style="background:#FFFFDD">
+		<iframe  width="900px"  height="600px" marginwidth="0" marginheight="0" src="./translimit.html" kwframeid="1">
 		#document
 		</iframe>
 		<div>
@@ -103,7 +108,7 @@
 			<p> But there's a catch! You may have noticed that as you increase the bandwidth, the pulse width initially decreases as expected, but eventually it starts increasing again. What's going on here?
 			</p>
 			
-			<p> The simulation code was written to include an additional spectral phase, which prevents the pulse from exhibiting transform-limited behaviour. Using the additional control sliders, the reader may externally compensate this built-in spectral phase to achieve the shortest (ie. transform-limited) pulse width. This also highlights an interesting phenomenon, the pulse broadening is a function of dispersion as well as the pulse bandwidth. The broader spectrum, the more sensitive the pulse is to dispersion-induced stretching. This tuning of spectral phase is thus, highly critical to achieving the shortest pulse widths. In a mode-locked laser, this spectral phase tuning or dispersion-compensation is achieved using a prism-pair[ref] or two, or in some designs, it is achieved with dispersion-controlled mirrors[ref] and barium fluoride (BaF<sub>2</sub>) wedge-pairs for fine-tuning. Dispersion-compensation can also be achieved external to the laser using a "pulse-shaper" [ref]. But, pulse-shapers can do much more than merely generating transform-limited pulses. In fact, pulsed lasers are used for facilitating nonlinear optical interactions and pulse-shaping can be used to not only achieve transform-limited pulses, but also to either promote or disallow certain nonlinear interactions to achieve coherent control [ref] of light-mediated processes.
+			<p> The simulation code was written to include an additional spectral phase, which prevents the pulse from exhibiting transform-limited behaviour. Using the additional control sliders, the reader may externally compensate this built-in spectral phase to achieve the shortest (ie. transform-limited) pulse width. This also highlights an interesting phenomenon, that pulse broadening is a function of dispersion as well as the pulse bandwidth. The broader spectrum, the more sensitive the pulse is to dispersion-induced stretching (see Eqn. 8 and Fig. 2 in the above mentioned <a href="http://www.newport.com/The-Effect-of-Dispersion-on-Ultrashort-Pulses/602091/1033/content.aspx">ref</a>). This tuning of spectral phase is thus, highly critical to achieving the shortest possible pulse width. In a mode-locked laser, this spectral phase tuning or dispersion-compensation is achieved using a <a href="https://en.wikipedia.org/wiki/Prism_compressor">prism-pair<a> or <a href="http://dx.doi.org/10.1364/OL.9.000150">two</a>, or in some designs, it is achieved with <a href="http://www.rp-photonics.com/chirped_mirrors.html">dispersion-controlled mirrors</a> and barium fluoride (BaF<sub>2</sub>) wedge-pairs for fine-tuning. Dispersion-compensation can also be achieved external to the laser using a "pulse-shaper" [ref]. But, pulse-shapers can do much more than merely generating transform-limited pulses. In fact, pulsed lasers are used for facilitating nonlinear optical interactions and pulse-shaping can be used to not only achieve transform-limited pulses, but also to either promote or disallow certain nonlinear interactions to achieve coherent control [ref] of light-mediated processes.
 			</p>
 			<p>
 			In a nonlinear interaction such as two-photon absorption, which was employed in our recent fluorescence-resonance energy transfer microscopy experiment (read about it here), two near-IR photons from the pulsed laser beam are absorbed to bridge an energy gap in a fluorescent protein and transfer an electron from the ground state manifold to an excited state. The protein eventually reverts back to the ground state and emits a visible photon as fluorescence, which is detected with sensitive detectors (such as photomultiplier tubes) to generate an image. During the absorption process, only the combined photon energies \(\hbar (\omega_1 + \omega_2)\) have to match the energy gap between the ground and excited states \(\hbar\omega_g\). Thus in addition to two photons of energy \(\hbar \omega/2\), any pair of photons (\(\hbar\omega_g/2-\delta,\hbar\omega_g/2+\delta\)) will do the trick, where \(\delta\) is some energy difference. In fact, for a broadband laser, all such photons participate in the absorption process and we can mathematically write the absorption \(TPA (\omega_g)\), at frequency \(\omega_g\) as :
@@ -116,23 +121,34 @@
 			</p>
 			
 		</div>
-		<iframe frameborder="0" width="900px"  height = "550px" marginwidth="0" marginheight="0" scrolling="no" src="./twophoton.html" kwframeid="1" style="background:#FFFFDD">
+		<iframe width="900px"  height = "600px" marginwidth="0" marginheight="0" src="./twophoton.html" kwframeid="1" >
 		#document
 		</iframe>
 		
 		<p>
-		On the left-hand side, the spectral field (blue) and the corresponding phase values (green) are approximated by 60 vertical bars. The black line  is the central frequency, defined as \(\omega_g/2\). On the right hand side, is a phasor diagram showing the magnitude(denoted by the length) and phase(denoted by the angle) of each contributing component of absorption (gray) and the resulting total absorption (orange). By hovering the mouse over the spectrum, each pair of contributing frequencies can be highlighted (red) and the contribution of that pair to total absorption is highlighted on the right (red). A different central frequency may be selected by clicking the corresponding bar on the left. The reader is encouraged to explore the effect of shifting the phase offset on the total absorption. At what phase offsets is the absorption maximum? When is it minimum? 
+		On the left-hand side, the spectral field (blue) and the corresponding phase values (green) are approximated by 60 vertical bars. The black line  is the central frequency, defined as \(\omega_g/2\). On the right hand side, is a phasor diagram showing the magnitude(denoted by the length) and phase(denoted by the angle) of each contributing component of absorption (gray) and the resulting total absorption (orange). By hovering the mouse over the spectrum, each pair of contributing frequencies can be highlighted (red) and the contribution of that pair to the total absorption is highlighted on the right (red). A different central frequency may be selected by clicking the corresponding bar on the left. The reader is encouraged to explore the effect of shifting the phase offset on the total absorption. At what phase offsets is the absorption maximum? When is it minimum? 
 		</p>
 		<p>
-		Notice that a phase shape that is symmetric about the central frequency (eg. when phase offset is zero), the resulting absorption is at a minimum, whereas when the phase shape is anti-symmetric, the absorption is at its maximum. Thus, if the individual absorptions can be arranged evenly about the unit circle, the absorption can be entirely eliminated. This can be seen more easily when we switch to a random phase distribution. The phase distribution generated by a random function distributes the individual components such that on an average they cancel out.
+		Notice that a phase shape that is symmetric about the central frequency (eg. when phase offset is zero), the resulting absorption is at a minimum because a each absorption component has a different phase angle resulting in a spread. Whereas, when the phase shape is anti-symmetric, the absorption components all align along the same phase and the total absorption is at its maximum. Thus, if the individual absorption contributions can be arranged evenly about the unit circle, the total absorption can be entirely eliminated. This can be seen more easily when we switch to a random phase distribution. The phase distribution generated by a random function distributes the individual components such that on an average they cancel out. Because of the random nature of the distribution, the absorption may not cancel every time, but it tells us that by carefully choosing a (semi-random) distribution about a frequency \(\omega_g/2\), the absorption at frequency \(\omega_g\) can be eliminated, whereas having a constant or anti-symmetric phase can promote full absorption.
 		</p>
 		
 		<p>
-		
+		Of course, arranging the phases for one particular frequency can give rise to unwanted features in absorption at other wavelengths. So, to achieve the results one wants, the spectral phase has to be designed taking into consideration the entire bandwidth and what particular absorption structure is desired. In the visualization below, an excitation pulse that is Gaussian in frequency is shown on the left. By combining the the principles of a flat phase promoting absorption and a random phase eliminating it, a phase function, designed such that it can let us select the part of spectrum over which absorption is to take place, is shown below it. On the right is the relative strength of the resulting two-photon absorption as a function of the wavelength - the higher the number, the better is the probability of exciting a fluorophore at that wavelength. Read about the first demonstration of this method <a href ="https://www2.chemistry.msu.edu/faculty/dantus/publications/78.pdf">here</a>.
 		</p>
-		<!-- <iframe frameborder="0" width="1200px"  height = "1000px" marginwidth="0" marginheight="0" scrolling="no" src="./pscalc.html" kwframeid="1">
+		
+		<iframe frameborder="0" width="900px"  height = "650px" marginwidth="0" marginheight="0" scrolling="no" src="./pscalc_gauss.html" kwframeid="1" >
 		#document
-		</iframe> -->
+		</iframe>
+		<p>
+		This can be particularly useful when the user wants to excite a single fluorophore out of many in a sample under consideration. This was demonstrated in a recent experiment in our group which you can read about <a href="http://www-personal.umich.edu/~jogilvie/Ogilvie_Group/Publications/Entries/2013/7/15_Two-photon_imaging_of_multiple_fluorescent_proteins_by_phase-shaping_and_linear_unmixing_with_a_single_broadband_laser.html">here</a>. By changing the position of the flat phase and its width, the absorption can be altered in milliseconds. By changing the width of the flat phase section and the center wavelength about which it is implemented, the reader can investigate the effect of the applied phase on the two-photon absorption probability or strength. Note that by changing the phase amplitude to 0, the user can get an idea of the full two-photon absorption of the excitation pulse.
+		</p>
+		<p>
+		Of course, this method works well when the spectrum is a perfect Gaussian and the frequency selection is quite broad. The reader will have realized that when the flat phase section is narrowed, the overall strength of two-photon absorption also decreases and that narrow selective excitation can be difficult with this technique. The visualization below is the same as the one above, but it implements the technique for a real broadband laser spectrum (as measured in our lab on the Venteon Pulse:One 6-fs Titanium Sapphire laser).
+		</p>
+		
+		<iframe frameborder="0" width="900px"  height = "650px" marginwidth="0" marginheight="0" scrolling="no" src="./pscalc_venteon.html" kwframeid="1" >
+		#document
+		</iframe>
 	</div>
   </body>
 </html>

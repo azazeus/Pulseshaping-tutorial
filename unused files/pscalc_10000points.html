@@ -11,7 +11,7 @@
 		<script type="text/javascript" src="./calc_shg.js"></script>
 		<script type="text/javascript" src="./make_phase_step.js"></script>
 		<script type="text/javascript" src="./make_phase_sin.js"></script>
-		<script type="text/javascript" src="./node_modules/numeric/numeric-1.2.6.min.js"></script>
+		<script type="text/javascript" src="./node-modules/numeric/numeric-1.2.6.min.js"></script>
 		<style type="text/css">
 			.axis path,
 			.axis line {
@@ -21,7 +21,7 @@
 				shape-rendering: crispEdges;
 			}
 			.background {
-				fill: #e7e7e7;
+				fill: #fff7f7;;
 			}
 			.axis text {
 				font-family: sans-serif;
@@ -40,31 +40,57 @@
 				stroke: red;
 				stroke-width: 1.5px;
 			}
+			.myslider {
+				float:left;
+				width:300px;
+				font-size:20px;
+				font-family:sans-serif;
+			}
+			.my-Wrapper-class {
+				width:900px;
+				margin:0px auto;
+			}
 		</style>
 	</head>
 	<body>
+		
 		<script type="text/javascript">
-			//global variable
-			var dataset;
+			//--------global variables--------
+			//constants
+			var int_height=250;
+			var int_width=450;
+			var ph_height=250;
 			var c=3e6;
+			var phase_step_loc=850;
+			var phase_rep=450;
+			var sin_amp=2*Math.PI;
+			var f_max = 20000;//in THz, defines time resolution
+			var npoints=1000; // # of equally spaced frequency points
+			var f_step = f_max/npoints; // frequency resolution
+			
+			//read in from Venteon spectrum
+			var dataset;
 			var wavel;
 			var int_wavel;
+			
+			// formatted arrays for D3 plots
+			var interp_spec_to_plot = [];
+			var phase_to_plot = [];
+			
+			//temporary data containers
+			var dat_holder=[];
+			
+			
 			var freq_to_interp=[];
 			var spec_int_f=[];
 			var freq_clip=[];
-			var dat_holder=[];
 			var spec_interp=[];
-			var interp_spec_to_plot = [];
 			var spec_int_phase =[];
-			var phase_step_loc=850;
-			var phase_rep=500;
-			var sin_amp=2*Math.PI;
 			var freq=[];
 			var spec_f = [];
 			var sh_spec_int=[];
 			var f_real = [];
 			var f_imag = [];
-			var phase_to_plot = [];
 			var phase_interp =[];
 			for (var i=0;i<10000;i++){
 				freq.push(i);
@@ -90,9 +116,10 @@
 					return Math.sqrt(Number(d["int"])) ; 
 				});
 				//show the raw data
-				plot2d(400,376,svg1,dataset,"Intensity", "Wavelength [nm]");
+				plot2d(int_width,int_height,svg1,dataset,"Intensity", "Wavelength [nm]");
 				
-				// get the frequency range and frequency vector
+				// get the frequency range of Venteon data and 
+				// make a uniformly spaced frequency array
 				dat_holder=f_interp(wavel);
 				freq_to_interp=dat_holder[0]; //equispaced frequency array
 				freq_clip=dat_holder[1].reverse();//wavelength array as frequency 
@@ -110,12 +137,10 @@
 					spec_f[freq_to_interp[i]]=spec_interp[i];
 					spec_int_phase[freq_to_interp[i]]=phase_interp[i];
 				}
-				
-				
 				for (var i=0;i<freq_to_interp.length;i++){
 					phase_to_plot[i]=[3e6/freq_to_interp[i],spec_int_phase[freq_to_interp[i]]];
 				}
-				plot2d(400,376,svg2,phase_to_plot,"Phase","Wavelength [nm]");
+				plot2d(int_width,ph_height,svg3,phase_to_plot,"Phase","Wavelength [nm]");
 				//real and imaginary parts of the field
 				f_real = numeric.mul(spec_f, numeric.cos(spec_int_phase));
 				f_imag = numeric.mul(spec_f, numeric.sin(spec_int_phase));
@@ -126,7 +151,7 @@
 				for (var i=0;i<4000;i++){
 					interp_spec_to_plot[i]=[3e6/freq[5000+i],sh_spec_int.x[5000+i]*Math.sqrt(c/(freq[5000+i]*freq[5000+i]))];
 				}
-				plot2d(400,376,svg3,interp_spec_to_plot,"Intensity","Wavelength [nm]");
+				plot2d(int_width,int_height,svg2,interp_spec_to_plot,"Intensity","Wavelength [nm]");
 			})
 			function ph_update() {
 				var x = document.getElementById("wl_select");
@@ -145,7 +170,7 @@
 				for (var i=0;i<freq_to_interp.length;i++){
 					phase_to_plot[i]=[3e6/freq_to_interp[i],spec_int_phase[freq_to_interp[i]]];
 				}
-				plot2d_update(400,376,svg2,phase_to_plot,"Phase","Wavelength [nm]");
+				plot2d_update(int_width,ph_height,svg3,phase_to_plot,"Phase","Wavelength [nm]");
 				
 				f_real = numeric.mul(spec_f, numeric.cos(spec_int_phase));
 				f_imag = numeric.mul(spec_f, numeric.sin(spec_int_phase));
@@ -156,14 +181,17 @@
 				for (var i=0;i<4000;i++){
 					interp_spec_to_plot[i]=[3e6/freq[5000+i],sh_spec_int.x[5000+i]*Math.sqrt(c/(freq[5000+i]*freq[5000+i]))];
 				}
-				plot2d_update(400,376,svg3,interp_spec_to_plot,"Intensity","frequency");
+				plot2d_update(int_width,int_height,svg2,interp_spec_to_plot,"Intensity","frequency");
 			}
 		</script>
-		
-		<div align="center">
-			<g>
-				<p>  0
-				<input id="amp_select" type="range" min="0", max="6.28" step="0.02" onclick="ph_update()" list="ampsteplist">
+		<div id="maincontainer" align="center">
+		<div class="my-Wrapper-class">
+		<div class = "myslider" height="100">
+				<p>
+				Phase amplitude
+				</p>  
+				0
+				<input id="amp_select" type="range" min="0", max="6.28" step="0.02" oninput="ph_update()" list="ampsteplist">
 				<datalist id="ampsteplist">
 				<option>0</option>
 				<option>1</option>
@@ -176,17 +204,16 @@
 				</datalist>
 				</input>
 				6.28
-				</p>
-			</g>
-			<p id ="amp_slider_text" style="text-align:center">
+				<p id ="amp_slider_text" style="text-align:center">
 				3.14 radians
-			</p>
-			
+				</p>
 		</div>
-		<div align="center">
-			<g>
-				<p> 750
-				<input id="wl_select" type="range" min="750", max="950" step="10" onclick="ph_update()" list="steplist">
+		<div class = "myslider" height="100">
+				<p>
+				Center wavelength
+				</p> 
+				750
+				<input id="wl_select" type="range" min="750", max="950" step="10" oninput="ph_update()" list="steplist">
 				<datalist id="steplist">
 				<option>750</option>
 				<option>800</option>
@@ -195,15 +222,16 @@
 				<option>950</option>
 				</datalist>
 				</input>
-				950 </p>
-			</g>
+				950
 			<p id ="slider1_text"> 850 nm
 			</p>
 		</div>
-		<div align="center">
-			<g>
-				<p> 300
-				<input id="rep_select" type="range" min="300", max="600" step="10" onclick="ph_update()" list="step2list">
+		<div class = "myslider" height="100">
+				<p>
+				Phase repetition
+				</p>
+				300
+				<input id="rep_select" type="range" min="300", max="600" step="10" oninput="ph_update()" list="step2list">
 				<datalist id="step2list">
 				<option>300</option>
 				<option>350</option>
@@ -214,10 +242,11 @@
 				<option>600</option>
 				</datalist>
 				</input>
-				600 </p>
-			</g>
+				600
 			<p id ="slider2_text"> 450 nm
 			</p>
+		</div>
+		</div>
 		</div>
 	</body>
 </html>

@@ -202,42 +202,30 @@
 			var svg3 = d3.select("#left_sc")
 				.append("svg");
 			
-			fetch_venteon();
+			fetch_gaussian();
 			
-			function fetch_venteon(){
-				//read in the data
-				d3.csv("http://localhost:8888/Calib_Venteon_spec_TE.txt", function(data) {
-					dataset=data.map(function(d){
-						return [ +d["wl"],Number(d["int"]) ]; 
-					});
-					wl=data.map(function(d){
-						return  +d["wl"]; 
-					});
-					e_field_vs_wl=data.map(function(d){
-						return Math.sqrt(Number(d["int"])) ; 
-					});
-					//show the raw data
-					plot2d_nox(int_width,int_height,svg1,dataset,"Pump E. field", "Wavelength [nm]");
-					
-					// get the frequency range of Venteon data and 
-					// make a uniformly spaced frequency array
-					dat_holder=get_freq_unif(wl); //temporary data container
-					freq_unif=dat_holder[0]; //equispaced frequency array
-					freq_non_unif=dat_holder[1].reverse();//wavelength array as frequency 
-					
-					// spectral electric field as a function of frequency
-					// corrected for the Jacobian
-					e_field_vs_f=jacobian(wl,e_field_vs_wl).reverse(); 
-					
-					// interpolate the field information to make it equispaced 
-					// over the range spanned by freq_unif 
-					e_field_fund=numeric.spline(freq_non_unif,e_field_vs_f,0,0).at(freq_unif);
-					for (var i=0;i<freq_unif.length;i++){
-					e_fld_fnd_full[freq_unif[i]/f_step]=e_field_fund[i];
+			function fetch_gaussian(){
+				var sigma = 300;//400;
+				var g_spec=[];
+				var bw_disp=[];
+				//find lowest multiple of f_step > min(freq_non_unif)
+				var freq_low=f_step*Math.ceil((c/1050)/f_step);
+				//find highest multiple of f_step < max(freq_non_unif)
+				var freq_high=f_step*Math.floor((c/650)/f_step);
+			
+				for (var i=0;i<npoints;i++){
+					g_spec[i]=Math.exp(-Math.pow(i*f_step-3750,2)/(2*Math.pow(sigma,2)));
+					e_fld_fnd_full[i]=g_spec[i];///(Math.sqrt(2*Math.PI)*sigma);
 				}
-					pscalc();
-				});
-			}
+				for (var i=0;i<(freq_high-freq_low)/f_step;i++){
+					freq_unif[i]=freq_low+i*f_step;
+					bw_disp[i]=[c/(i*f_step+freq_low),g_spec[i+(freq_low/f_step)]*Math.sqrt(c)/(i*f_step+freq_low)];
+				}
+				
+				//show the raw data
+				plot2d_nox(int_width,int_height,svg1,bw_disp,"Pump E. field", "wavelength [nm]");
+				pscalc();
+			}			
 			
 			function pscalc(){
 				//phase_applied=make_phase_sin(freq_unif,phase_step_loc,phase_rep,sin_amp);
@@ -264,7 +252,7 @@
 				}
 				
 				//display second harmonic 
-				plot2d_fixy(int_width,shg_height,svg2,interp_spec_to_plot,"Strength of TPA [arb. units]","Wavelength [nm]",0,2*npoints/1000);
+				plot2d_fixy(int_width,shg_height,svg2,interp_spec_to_plot,"Strength of TPA [arb. units]","Wavelength [nm]",0,80*npoints/1000);
 			}
 			
 			function ph_update() {
@@ -298,7 +286,7 @@
 				for (var i=0;i<4000/f_step;i++){
 					interp_spec_to_plot[i]=[3e6/freq[Math.floor(6000/f_step+i)],shg_int_vs_wl[Math.floor(6000/f_step+i)]];
 				}
-				plot2d_fixy_up(int_width,shg_height,svg2,interp_spec_to_plot,"Two Photon Absorption","Wavelength [nm]",0,2*npoints/1000);
+				plot2d_fixy_up(int_width,shg_height,svg2,interp_spec_to_plot,"Two Photon Absorption","Wavelength [nm]",0,80*npoints/1000);
 			}
 		</script>
 	</body>

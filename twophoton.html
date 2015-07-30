@@ -213,7 +213,7 @@
 				if(ph_shape=="random"){
 					console.log("making random");
 					for (var i=0;i<npoints;i++){
-						g_ph[i]=Math.PI*(2*Math.random(phase_off+(i-cent_bar-Math.floor(2500/f_mult))*f_mult/ph_rep)-1);
+						g_ph[i]=Math.PI*(2*Math.random()-1);
 					}
 				}
 				for (var i=0;i<3000/f_mult;i++){
