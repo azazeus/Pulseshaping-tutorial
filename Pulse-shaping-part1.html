@@ -1,0 +1,294 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0079)http://www-personal.umich.edu/~jogilvie/Ogilvie_Group/Nonlinear_Microscopy.html -->
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+		<meta name="Generator" content="openElement (1.49)" />
+		<meta name="iWeb-Build" content="local-build-20111125" />
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+		<meta name="viewport" content="width=900" />
+		<title>Nonlinear Microscopy</title>
+		<link rel="stylesheet" type="text/css" media="screen,print" href="./Pulse_shaping_files/Nonlinear_Microscopy.css" />
+		<!--[if lt IE 8]><link rel='stylesheet' type='text/css' media='screen,print' href='Pulse_shaping_files/Nonlinear_MicroscopyIE.css'/><![endif]-->
+		<!--[if gte IE 8]><link rel='stylesheet' type='text/css' media='screen,print' href='Media/IE8.css'/><![endif]-->
+		<script type="text/javascript" src="./Pulse_shaping_files/iWebSite.js"></script>
+		<script type="text/javascript" src="./Pulse_shaping_files/WidgetCommon.js"></script>
+		<script type="text/javascript" src="./Pulse_shaping_files/navbar.js"></script>
+		<script type="text/javascript" src="./Pulse_shaping_files/iWebImage.js"></script>
+		<script type="text/javascript" src="./Pulse_shaping_files/Nonlinear_Microscopy.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="./dataShow.js"></script>
+		<script type="text/javascript" src="./wl_to_f.js"></script>
+		<script type="text/javascript" src="./f_to_wl.js"></script>
+		<script type="text/javascript" src="./calc_shg.js"></script>
+		<script type="text/javascript" src="./make_phase_step.js"></script>
+		<script type="text/javascript" src="./make_phase_sin.js"></script>
+		<script type="text/javascript" src="./node-modules/numeric/numeric-1.2.6.min.js"></script>
+		<script type="text/javascript" src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+		<style type="text/css">
+			div#widget0 .navbar {  
+			  font-family: Arial, sans-serif;  
+			  font-size: 13px;  
+			  color: #a1a1a1;  
+			  margin-top: 9px;  
+			  margin-right: 0px;  
+			  margin-bottom: 6px;  
+			  margin-left: 0px;  
+			  line-height: 30px;
+			}
+
+			div#widget0 .navbar-bg {  
+			  text-align: center;
+			}
+
+			div#widget0 .navbar-bg ul {  
+			  list-style-type: none;  
+			  list-style-position: outside;  
+			  list-style-image: none;  
+			  margin-top: 0px;  
+			  margin-right: 0px;  
+			  margin-bottom: 0px;  
+			  margin-left: 0px;  
+			  padding-top: 0px;  
+			  padding-right: 0px;  
+			  padding-bottom: 0px;  
+			  padding-left: 0px;
+			}
+
+			div#widget0 li {  
+			  list-style-type: none;  
+			  display: inline;  
+			  padding-top: 0px;  
+			  padding-right: 10px;  
+			  padding-bottom: 0px;  
+			  padding-left: 10px;
+			}
+
+			div#widget0 li a {  
+			  text-decoration: none;  
+			  color: #a1a1a1;
+			}
+
+			div#widget0 li a:visited {  
+			  text-decoration: none;  
+			  color: #a1a1a1;
+			}
+
+			div#widget0 li a:hover {  
+			  text-decoration: none;  
+			  color: #eeeeee;
+			}
+
+			div#widget0 li.current-page a {  
+			  text-decoration: none;  
+			  color: white;  
+			  font-weight: bold;
+			}
+
+			#para1 {  
+			  left: 135px;  
+			  right: 135px;  
+			  color: red;
+			}
+			body {
+				background:#e7e7e7;
+			}
+			IMG.displayed {
+				display: block;
+				margin-left: auto;
+				margin-right: auto 
+			}
+			#mainpage {
+				clear:both;
+				margin-right:auto;
+				margin-left:auto;
+				color: #000000;
+				width: 900px;
+				padding: 0px;
+				
+				font-family: sans-serif;
+				font-size: 18px;
+				color: #e7e7e7	;
+				margin: 9px 0px 6px 0px;
+				line-height: 30px;
+								
+				background: rgb(47,47,47);
+				opacity: 1.00;
+				padding-bottom: 0px;
+				padding-top: 0px;
+				text-align: justify;
+				text-decoration: none;
+				text-indent: 0px;
+				text-transform: none;			
+			}
+			#header {
+				background-color:rgb(47,47,47);
+				color:white;
+				text-align:center;
+				padding:5px;
+			}
+			#nav {
+				line-height:30px;
+				background-color:#eeeeee;
+				height:300px;
+				width:100px;
+				float:left;
+				padding:5px; 
+			}
+			#section {
+				width:350px;
+				float:left;
+				padding:10px; 
+			}
+			#footer {
+				background-color:black;
+				color:white;
+				clear:both;
+				text-align:center;
+				padding:5px; 
+			}
+			.equation{
+				align:center;
+				font-size:12;
+			}
+			iframe{
+				background:#EEEEEE;
+				border-style:none;
+				padding: 0px 0px 0px 0px;
+				border-radius:20px;
+			}
+		</style> 
+	</head>
+	<body onunload="onPageUnload();" onload="onPageLoad();" style="   background: rgb(47, 47, 47); margin: 0pt; ">
+		<div style="text-align: center; ">
+			<div style="margin-bottom: 0px; margin-left: auto; margin-right: auto; margin-top: 0px; overflow: hidden; position: relative; word-wrap: break-word;  background: rgb(48, 48, 48); text-align: left; width: 900px; " id="body_content">
+				<div style="margin-left: 0px; position: relative; width: 900px; z-index: 0; " id="nav_layer">
+				  <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+				  <div style="height: 1px; line-height: 1px; " class="tinyText"> </div>
+				  <div class="com-apple-iweb-widget-navbar flowDefining" id="widget0" style="margin-left: 35px; margin-top: 72px; opacity: 1.00; position: relative; width: 830px; z-index: 1; ">
+					<div id="widget0-navbar" class="navbar">
+					  <div id="widget0-bg" class="navbar-bg">
+						<ul id="widget0-navbar-list" class="navbar-list">
+						  <li class="noncurrent-page"><a href="http://www-personal.umich.edu/%7Ejogilvie/Ogilvie_Group/Welcome.html">Welcome
+							  </a></li>
+						  <li class="noncurrent-page"><a href="http://www-personal.umich.edu/%7Ejogilvie/Ogilvie_Group/Research.html">Research
+							  </a></li>
+						  <li class="noncurrent-page"><a href="http://www-personal.umich.edu/%7Ejogilvie/Ogilvie_Group/Group/Group.html">Group
+							  </a></li>
+						  <li class="noncurrent-page"><a href="http://www-personal.umich.edu/%7Ejogilvie/Ogilvie_Group/Publications/Publications.html">Publications
+							  </a></li>
+						  <li class="noncurrent-page"><a href="http://www-personal.umich.edu/%7Ejogilvie/Ogilvie_Group/Teaching/Teaching.html">Teaching
+							  </a></li>
+						  <li class="noncurrent-page"><a href="http://www-personal.umich.edu/%7Ejogilvie/Ogilvie_Group/Contact.html">Contact
+							  </a></li>
+						  <li class="noncurrent-page"><a href="http://www-personal.umich.edu/%7Ejogilvie/Ogilvie_Group/LUMOS.html">LUMOS
+							  </a></li>
+						  <li class="noncurrent-page"><a href="http://www-personal.umich.edu/%7Ejogilvie/Ogilvie_Group/CUWiP_2015.html">CUWiP 2015
+							  </a></li>
+						</ul>
+					  </div>
+					</div>
+				  </div>
+				  <script type="text/javascript"><!--//--><![CDATA[//><!--
+					new NavBar('widget0', 'Scripts/Widgets/Navbar', 'Scripts/Widgets/SharedResources', '.', {"path-to-root": "", "navbar-css": ".navbar {\n\tfont-family: Arial, sans-serif;\n\tfont-size: 13px;\n\tcolor: #A1A1A1;\n\tmargin: 9px 0px 6px 0px;\n\tline-height: 30px;\n}\n\n.navbar-bg {\n\ttext-align: center;\n}\n\n.navbar-bg ul {\n\tlist-style: none;\n\tmargin: 0px;\n\tpadding: 0px;\n}\n\n\nli {\n\tlist-style-type: none;\n\tdisplay: inline;\n\tpadding: 0px 10px 0px 10px;\n}\n\n\nli a {\n\ttext-decoration: none;\n\tcolor: #A1A1A1;\n}\n\nli a:visited {\n\ttext-decoration: none;\n\tcolor: #A1A1A1;\n}\n\n\nli a:hover\n{\n\ttext-decoration: none;\n \tcolor: #eee;\n}\n\n\nli.current-page a\n{\n\ttext-decoration: none;\n\t color: #fff;\n\tfont-weight: bold;\n\n}", "current-page-GUID": "090FE3FA-1E7C-4E28-8A60-5B0CB088A4E1", "isCollectionPage": "NO"});
+					//--><!]]></script>
+				  <div id="id1" style="height: 34px; left: 35px; position: absolute; top: 23px; width: 830px; z-index: 1; " class="style_SkipStroke shape-with-text">
+					<div class="text-content style_External_830_34" style="padding: 0px; ">
+					  <div class="style">
+						<p style="padding-bottom: 0pt; padding-top: 0pt; " class="paragraph_style">Ogilvie Group</p>
+					  </div>
+					</div>
+				  </div>
+				  <div style="clear: both; height: 0px; line-height: 0px; " class="spacer"> </div>
+				</div>
+				<div style="height: 135px; margin-left: 0px; position: relative; width: 900px; z-index: 10; " id="header_layer">
+				  <div style="height: 0px; line-height: 0px; " class="bumper">&nbsp;</div>
+				  <div style="height: 119px; width: 901px;  height: 119px; left: -1px; position: absolute; top: 3px; width: 901px; z-index: 1; " class="tinyText reflection_0"><canvas width="901" height="36.2" style="position: absolute; top: 119px; margin-top: 1px; left: 0px;"></canvas>
+					<div style="position: relative; width: 901px; ">
+					  <img src="Pulse_shaping_files/shapeimage_1.png" alt="" style="height: 119px; left: 0px; position: absolute; top: 0px; width: 901px; ">
+					</div>
+				  </div>
+				</div>
+				<div style="margin-left: 0px; position: relative; width: 900px; z-index: 5; " id="body_layer">
+					<div id="mainpage">
+						<div id="header">
+							<h2>Pulse-shaping tutorial: Part 1</h2>
+						</div>
+						<div>
+							<p>
+							Pulse-shaping consists of a wide range of techniques in which the spectral amplitude and/or spectral phase of a pulsed laser is modified, thus altering the interaction of the pulse with the surrounding media. This tutorial will mainly talk about phase-based pulse-shaping techniques that can be used for something as basic as compressing a time-broadened pulse to its shortest possible duration, to something more interesting such as controlling nonlinear interactions such as two-photon absorption to achieve selective excitation of multiple fluorophores with a single broadband laser. Let's start by looking at the linear dynamics of laser pulses.
+							</p>
+						</div>
+						<div id="header">
+							<h3>A tale of two conjugate variables: time and frequency</h3>
+						</div>
+						<div>
+							<p>
+							A broadband laser such as a mode-locked <a href="https://en.wikipedia.org/wiki/Ti-sapphire_laser"> Ti:Sapphire laser</a> can generate pulses that are as short as a few femtoseconds in duration. The pulse duration of the laser and the corresponding bandwidth of the pulse are related via a <a href="https://en.wikipedia.org/wiki/Fourier_transform">Fourier transform</a>. The shorter the pulse, the larger the bandwidth and higher the number of laser modes that need to be supported by the laser cavity (A laser mode is defined as a spatial distribution of electromagnetic field in space with a distinct frequency and polarization). Having a large bandwidth is a necessary, but not a sufficient condition to generate a short pulse. This is where spectral phase comes in.
+							</p>
+							<p>
+							Each laser mode can be thought of as a separate continuous-wave laser with a sinusoidally varying amplitude and a distinct <a href="https://en.wikipedia.org/wiki/Phase_(waves)">phase</a>. At any given time, the total electric field of the laser is the sum of the fields of the individual modes. To generate a pulse in time, the electric fields of all laser modes need to add constructively such that the instantaneous field generated is large and the laser outputs a pulse of light. This process is called mode-locking[ref] and is achieved by adjusting the phases (ie. time delays) of the individual modes judiciously. To get the shortest pulse, the relative phase difference between any two laser modes should be linearly proportional to the difference in their frequencies and the resulting pulse that is generated is called the transform-limited pulse. This phase described as a function of light frequency is called spectral phase.
+							</p>
+							<p >
+							More rigorously, spectral phase \(\phi(\omega)\) at an arbitrary frequency \(\omega\) may be defined with respect to the central frequency of the laser \(\omega_0\) in terms of a <a href="https://en.wikipedia.org/wiki/Taylor_series"> Taylor series</a> as follows: 
+							</p> 
+							<p class="equation">
+							$$\phi(\omega) = \phi(\omega_0) + \frac{d \phi}{d \omega} (\omega - \omega_0) + \frac{1}{2!} \frac{d^2 \phi}{d \omega^2} (\omega - \omega_0)^2 + \frac{1}{3!}\frac{d^3 \phi}{d \omega^3} (\omega - \omega_0)^3 + \ldots$$
+							</p>
+							<p>
+							Using this notation, a spectral phase of arbitrary complexity can be described. The first term on the right hand side shifts the overall phase of the pulse, while the second term results in a shift in the pulse location along the time axis (hence also called 'group delay'). Together, these terms have no effect on the pulse shape which remains transform-limited. The terms that are of interest to us, with respect to pulse-shaping, are the third, fourth and higher-order terms. For example, the third term is called the second-order or quadratic phase and will stretch the pulse in the time domain. The corresponding derivative is called second-order dispersion (and sometimes group-delay dispersion or GDD) and is usually expressed in terms of \(\mathrm{fs}^2\) which we will use here (other definitions are possible - see <a href="http://www.newport.com/The-Effect-of-Dispersion-on-Ultrashort-Pulses/602091/1033/content.aspx">here</a> for a great reference). Similarly, for the higher order terms we get cubic phase, quartic phase, etc. and the derivatives are accordingly third-order dispersion \((\mathrm{fs}^3)\), fourth-order dispersion \((\mathrm{fs}^4)\), etc. These higher-order phases will also distort the pulse in time in addition to lengthening its duration, as we will see below.
+							</p>
+							<p>
+							
+							</p>
+						</div>
+						<iframe  width="900px"  height="600px" marginwidth="0" marginheight="0" src="./translimit.html" kwframeid="1">
+						#document
+						</iframe>
+						<div>
+							<p>
+							The interactive visualization above shows the electric field spectrum and time signature of a Gaussian pulse in normalized units. The reader is encouraged to adjust the bandwidth slider to see how the pulse changes in the wavelength and time domain.
+							</p>
+							<div id="header">
+								<h3>But therein lies a catch!</h3>
+							</div>
+							<p> Have you found the problem yet? You may have noticed that as you increase the bandwidth, the pulse width initially decreases as expected, but eventually it starts increasing again. What's going on here?
+							</p>
+							
+							<p> The simulation code was written to include a hidden spectral phase, which prevents the pulse from exhibiting transform-limited behaviour. Using the additional control sliders, the reader may externally compensate this built-in spectral phase to achieve the shortest (ie. transform-limited) pulse width. The program will let you know when you have hit the right balance. This also highlights an interesting phenomenon, that pulse broadening is a function of dispersion as well as the pulse bandwidth. The broader spectrum, the more sensitive the pulse is to dispersion-induced stretching (see Eqn. 8 and Fig. 2 in the above mentioned <a href="http://www.newport.com/The-Effect-of-Dispersion-on-Ultrashort-Pulses/602091/1033/content.aspx">ref</a>). This tuning of spectral phase is thus, highly critical to achieving the shortest possible pulse width.
+							</p>
+							<p>
+							Where does this dispersion come from? Any time light travels through an optical medium that is not perfect vacuum, we observe dispersion. This is because in any medium, different wavelengths (or frequencies, actually) travel at different speeds. This means that even if the phases of the individual modes were initially perfectly arranged, when they pass through a piece of glass such as a <a href="http://www.olympusmicro.com/primer/anatomy/objectives.html">microscope objective</a>, the time delays get rearranged. This type of dispersion is called material dispersion and for visible frequencies the derivatives discussed above are almost always positive. For visible wavelengths, therefore, negative dispersion has to be generated by means of a spatial structure (eg. waveguides) or by geometric means as we will see below. Even before the light leaves the laser to encounter a piece of glass it encounters significant material dispersion from the gain medium, any transmissive optics such as lenses and even the length of air column that makes up the cavity. In an mode-locked laser, this spectral phase tuning or dispersion-compensation is achieved using a <a href="https://en.wikipedia.org/wiki/Prism_compressor">prism-pair</a> or <a href="http://dx.doi.org/10.1364/OL.9.000150">two</a>, or in some designs, it is achieved with special <a href="http://www.rp-photonics.com/chirped_mirrors.html">dispersion-compensating mirrors</a> in combination with barium fluoride (BaF<sub>2</sub>) wedge-pairs for fine-tuning [ref]. Outside the laser, tunable dispersion-compensation can be achieved using a device called a "pulse-shaper".
+							</p>
+							<img class="displayed"  src="./pulse_shaping_files/pulse-shaper.svg" alt="Pulse-shaper schematic" />
+							<p>
+							Typically, a pulse-shaper comprises of the following three elements: 1) a spatially dispersive element such as a grating that splits the light into its constituent individual modes,  2) a collimating element such as a lens (or better, a concave mirror) that converts the spreading beam into a collimated beam, 3) actively tunable phase delay generator such as a linear array of liquid crystal based spatial light modulator (SLM). By applying voltages of appropriate values to each pixel on the SLM, the phases for each frequency (or a group of closely spaced frequencies, depending on the optical resolution of the SLM) can be modified to generate a transform-limited pulse. For a detailed review of pulse-shaper geometries see this wonderful <a href="https://engineering.purdue.edu/~amw/Pulse_Shaping_Opt_Comm_2011.pdf">review article</a>. But, pulse-shapers can do much more than merely generating transform-limited pulses. In fact, pulsed lasers are used for facilitating nonlinear optical interactions and pulse-shaping can be used to not only achieve transform-limited pulses, but also to either promote or disallow certain nonlinear interactions to achieve coherent control [ref] of light-mediated processes.
+							</p> 
+							<p>
+							To see how this is done, continue on to <a href="pulse-shaping-part2.html">part 2</a> of this tutorial.
+							</p>
+						</div>
+						<p>
+						This tutorial is written in HTML and Javascript and is powered by the data visualization library <a href=http://d3js.org/>D3.js</a> and the numerical calculation library <a href="http://www.numericjs.com/">Numeric Javascript</a>. The equations are typeset in <a href="https://www.mathjax.org/">MathJax</a>.
+						</p>
+					</div>
+					<div style="height: 2px; width: 892px;  height: 1px; left: 3px;  width: 892px; z-index: 1; " class="tinyText">
+						<div style="position: relative; width: 892px; ">
+						  <img src="Pulse_shaping_files/shapeimage_2.jpg" alt="" style="height: 2px; left: 0px; margin-top: -1px; position: absolute; top: 0px; width: 892px; ">
+						</div>
+					</div>
+					<div id="id5" style="height: 48px; left: 3px;  width: 897px; z-index: 1; " class="style_SkipStroke_3 shape-with-text">
+						<div class="text-content graphic_textbox_layout_style_default_External_897_48" style="padding: 0px; ">
+						  <div class="graphic_textbox_layout_style_default">
+							<p style="padding-bottom: 0pt; padding-top: 0pt; " class="paragraph_style_3"><a title="http://www.umich.edu/" href="http://www.umich.edu/">University of Michigan</a>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp; <a title="http://www.lsa.umich.edu/physics" href="http://www.lsa.umich.edu/physics">Department of Physics</a>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp; <a title="http://www.umich.edu/~molbiop/" href="http://www.umich.edu/~molbiop/">Biophysics at Michigan</a></p>
+						  </div>
+						</div>
+					</div>
+				</div>
+				<div style="height: 100px; margin-left: 0px; position: relative; width: 900px; z-index: 15; " id="footer_layer">
+					<div style="height: 0px; line-height: 0px; " class="bumper">&nbsp;</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
