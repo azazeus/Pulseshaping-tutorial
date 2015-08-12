@@ -1,8 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0079)http://www-personal.umich.edu/~jogilvie/Ogilvie_Group/Nonlinear_Microscopy.html -->
+<!-- Author: Amar Bhagwat -->
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 	<head>
-		<meta charset="utf-8">
-		<title>Pulseshaping tutorial</title>
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+		<meta name="Generator" content="openElement (1.49)" />
+		<meta name="iWeb-Build" content="local-build-20111125" />
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+		<meta name="viewport" content="width=900" />
+		<title>Nonlinear Microscopy</title>
+		<link rel="stylesheet" type="text/css" media="screen,print" href="./pulse_shaping_files/Nonlinear_Microscopy.css" />
+		<!--[if lt IE 8]><link rel='stylesheet' type='text/css' media='screen,print' href='pulse_shaping_files/Nonlinear_MicroscopyIE.css'/><![endif]-->
+		<!--[if gte IE 8]><link rel='stylesheet' type='text/css' media='screen,print' href='Media/IE8.css'/><![endif]-->
+		<script type="text/javascript" src="./pulse_shaping_files/iWebSite.js"></script>
+		<script type="text/javascript" src="./pulse_shaping_files/WidgetCommon.js"></script>
+		<script type="text/javascript" src="./pulse_shaping_files/navbar.js"></script>
+		<script type="text/javascript" src="./pulse_shaping_files/iWebImage.js"></script>
+		<script type="text/javascript" src="./pulse_shaping_files/Nonlinear_Microscopy.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="./dataShow.js"></script>
 		<script type="text/javascript" src="./wl_to_f.js"></script>
@@ -11,12 +25,79 @@
 		<script type="text/javascript" src="./make_phase_step.js"></script>
 		<script type="text/javascript" src="./make_phase_sin.js"></script>
 		<script type="text/javascript" src="./node-modules/numeric/numeric-1.2.6.min.js"></script>
-		
 		<script type="text/javascript" src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
-		
-		<style>
+		<style type="text/css">
+			div#widget0 .navbar {  
+			  font-family: Arial, sans-serif;  
+			  font-size: 13px;  
+			  color: #a1a1a1;  
+			  margin-top: 9px;  
+			  margin-right: 0px;  
+			  margin-bottom: 6px;  
+			  margin-left: 0px;  
+			  line-height: 30px;
+			}
+
+			div#widget0 .navbar-bg {  
+			  text-align: center;
+			}
+
+			div#widget0 .navbar-bg ul {  
+			  list-style-type: none;  
+			  list-style-position: outside;  
+			  list-style-image: none;  
+			  margin-top: 0px;  
+			  margin-right: 0px;  
+			  margin-bottom: 0px;  
+			  margin-left: 0px;  
+			  padding-top: 0px;  
+			  padding-right: 0px;  
+			  padding-bottom: 0px;  
+			  padding-left: 0px;
+			}
+
+			div#widget0 li {  
+			  list-style-type: none;  
+			  display: inline;  
+			  padding-top: 0px;  
+			  padding-right: 10px;  
+			  padding-bottom: 0px;  
+			  padding-left: 10px;
+			}
+
+			div#widget0 li a {  
+			  text-decoration: none;  
+			  color: #a1a1a1;
+			}
+
+			div#widget0 li a:visited {  
+			  text-decoration: none;  
+			  color: #a1a1a1;
+			}
+
+			div#widget0 li a:hover {  
+			  text-decoration: none;  
+			  color: #eeeeee;
+			}
+
+			div#widget0 li.current-page a {  
+			  text-decoration: none;  
+			  color: white;  
+			  font-weight: bold;
+			}
+
+			#para1 {  
+			  left: 135px;  
+			  right: 135px;  
+			  color: red;
+			}
 			body {
-				background:#ffffff;
+				background:#e7e7e7;
+			}
+			IMG.displayed {
+				display: block;
+				margin-left: auto;
+				margin-right: auto 
 			}
 			#mainpage {
 				clear:both;
@@ -24,11 +105,15 @@
 				margin-left:auto;
 				color: #000000;
 				width: 900px;
-				padding: 5px;
+				padding: 0px;
+				
 				font-family: sans-serif;
 				font-size: 18px;
+				color: #e7e7e7	;
+				margin: 9px 0px 6px 0px;
+				line-height: 30px;
 								
-				background: #ffffff;
+				background: rgb(47,47,47);
 				opacity: 1.00;
 				padding-bottom: 0px;
 				padding-top: 0px;
@@ -38,7 +123,7 @@
 				text-transform: none;			
 			}
 			#header {
-				background-color:black;
+				background-color:rgb(47,47,47);
 				color:white;
 				text-align:center;
 				padding:5px;
@@ -73,89 +158,143 @@
 				padding: 0px 0px 0px 0px;
 				border-radius:20px;
 			}
-		</style>
+		</style> 
 	</head>
-	<body>
-	<div id="mainpage">
-		<div id="header">
-			<h1>Pulse-shaping tutorial</h1>
+	<body onunload="onPageUnload();" onload="onPageLoad();" style="   background: rgb(47, 47, 47); margin: 0pt; ">
+		<div style="text-align: center; ">
+			<div style="margin-bottom: 0px; margin-left: auto; margin-right: auto; margin-top: 0px; overflow: hidden; position: relative; word-wrap: break-word;  background: rgb(48, 48, 48); text-align: left; width: 900px; " id="body_content">
+				<div style="margin-left: 0px; position: relative; width: 900px; z-index: 0; " id="nav_layer">
+				  <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+				  <div style="height: 1px; line-height: 1px; " class="tinyText"> </div>
+				  <div class="com-apple-iweb-widget-navbar flowDefining" id="widget0" style="margin-left: 35px; margin-top: 72px; opacity: 1.00; position: relative; width: 830px; z-index: 1; ">
+					<div id="widget0-navbar" class="navbar">
+					  <div id="widget0-bg" class="navbar-bg">
+						<ul id="widget0-navbar-list" class="navbar-list">
+						  <li class="noncurrent-page"><a href="http://www-personal.umich.edu/%7Ejogilvie/Ogilvie_Group/Welcome.html">Welcome
+							  </a></li>
+						  <li class="noncurrent-page"><a href="http://www-personal.umich.edu/%7Ejogilvie/Ogilvie_Group/Research.html">Research
+							  </a></li>
+						  <li class="noncurrent-page"><a href="http://www-personal.umich.edu/%7Ejogilvie/Ogilvie_Group/Group/Group.html">Group
+							  </a></li>
+						  <li class="noncurrent-page"><a href="http://www-personal.umich.edu/%7Ejogilvie/Ogilvie_Group/Publications/Publications.html">Publications
+							  </a></li>
+						  <li class="noncurrent-page"><a href="http://www-personal.umich.edu/%7Ejogilvie/Ogilvie_Group/Teaching/Teaching.html">Teaching
+							  </a></li>
+						  <li class="noncurrent-page"><a href="http://www-personal.umich.edu/%7Ejogilvie/Ogilvie_Group/Contact.html">Contact
+							  </a></li>
+						  <li class="noncurrent-page"><a href="http://www-personal.umich.edu/%7Ejogilvie/Ogilvie_Group/LUMOS.html">LUMOS
+							  </a></li>
+						  <li class="noncurrent-page"><a href="http://www-personal.umich.edu/%7Ejogilvie/Ogilvie_Group/CUWiP_2015.html">CUWiP 2015
+							  </a></li>
+						</ul>
+					  </div>
+					</div>
+				  </div>
+				  <script type="text/javascript"><!--//--><![CDATA[//><!--
+					new NavBar('widget0', 'Scripts/Widgets/Navbar', 'Scripts/Widgets/SharedResources', '.', {"path-to-root": "", "navbar-css": ".navbar {\n\tfont-family: Arial, sans-serif;\n\tfont-size: 13px;\n\tcolor: #A1A1A1;\n\tmargin: 9px 0px 6px 0px;\n\tline-height: 30px;\n}\n\n.navbar-bg {\n\ttext-align: center;\n}\n\n.navbar-bg ul {\n\tlist-style: none;\n\tmargin: 0px;\n\tpadding: 0px;\n}\n\n\nli {\n\tlist-style-type: none;\n\tdisplay: inline;\n\tpadding: 0px 10px 0px 10px;\n}\n\n\nli a {\n\ttext-decoration: none;\n\tcolor: #A1A1A1;\n}\n\nli a:visited {\n\ttext-decoration: none;\n\tcolor: #A1A1A1;\n}\n\n\nli a:hover\n{\n\ttext-decoration: none;\n \tcolor: #eee;\n}\n\n\nli.current-page a\n{\n\ttext-decoration: none;\n\t color: #fff;\n\tfont-weight: bold;\n\n}", "current-page-GUID": "090FE3FA-1E7C-4E28-8A60-5B0CB088A4E1", "isCollectionPage": "NO"});
+					//--><!]]></script>
+				  <div id="id1" style="height: 34px; left: 35px; position: absolute; top: 23px; width: 830px; z-index: 1; " class="style_SkipStroke shape-with-text">
+					<div class="text-content style_External_830_34" style="padding: 0px; ">
+					  <div class="style">
+						<p style="padding-bottom: 0pt; padding-top: 0pt; " class="paragraph_style">Ogilvie Group</p>
+					  </div>
+					</div>
+				  </div>
+				  <div style="clear: both; height: 0px; line-height: 0px; " class="spacer"> </div>
+				</div>
+				<div style="height: 135px; margin-left: 0px; position: relative; width: 900px; z-index: 10; " id="header_layer">
+				  <div style="height: 0px; line-height: 0px; " class="bumper">&nbsp;</div>
+				  <div style="height: 119px; width: 901px;  height: 119px; left: -1px; position: absolute; top: 3px; width: 901px; z-index: 1; " class="tinyText reflection_0"><canvas width="901" height="36.2" style="position: absolute; top: 119px; margin-top: 1px; left: 0px;"></canvas>
+					<div style="position: relative; width: 901px; ">
+					  <img src="pulse_shaping_files/shapeimage_1.png" alt="" style="height: 119px; left: 0px; position: absolute; top: 0px; width: 901px; ">
+					</div>
+				  </div>
+				</div>
+				<div style="margin-left: 0px; position: relative; width: 900px; z-index: 5; " id="body_layer">
+					<div id="mainpage">
+						<div id="header">
+							<h2>Pulse-shaping tutorial: Part 1</h2>
+						</div>
+						<div>
+							<p>
+							Pulsed lasers are employed widely in achieving nonlinear optical effects due to their high instantaneous intensity that results from limiting their modest pulse energy (nanojoules or 10<sup>-9</sup> joule) to a very short time duration (femtoseconds or 10<sup>-15</sup> seconds) giving rise to Megawatts (or 10<sup>6</sup> watts) of power. For comparison, the energy of 1 joule per 1 second is 1 watt of power, equivalent to a very dim light bulb.
+							</p> 
+							<p>Pulse-shaping consists of a wide range of techniques in which the amplitude and/or phase of the spectrum of a pulsed laser are manipulated, to alter the interaction of the pulse with the surrounding media. This tutorial will mainly talk about phase-based pulse-shaping techniques that can be used to achieve linear effects such as compressing a pulse in time to its shortest possible duration, or for something more complex such as actively controlling nonlinear optical interactions such as two-photon absorption. As we will see below, in our research, we use both: 1) to counter the detrimental effect of intervening glass from optical elements that would otherwise result in hopelessly stretched pulse-durations, and 2) to achieve selective excitation of one fluorophore at a time (out of many) in a biological sample with a single broadband laser.
+							</p>
+							<p>
+							Let's start by looking at the linear dynamics of laser pulses and the effect of transmission through media on short pulses. In <a href="pulse-shaping-part2.html">part 2</a> of this tutorial, we will investigate how phase-based techniques can be used to turn on or off nonlinear effects over certain portions of the pulse spectrum.
+							</p>
+						</div>
+						<div id="header">
+							<h3>A tale of two conjugate variables: time and frequency</h3>
+						</div>
+						<div>
+							<p>
+							A broad bandwidth laser such as a mode-locked <a href="https://en.wikipedia.org/wiki/Ti-sapphire_laser"> Ti:Sapphire laser</a> can generate pulses that are as short as a few femtoseconds in duration. The pulse duration of the laser and the corresponding bandwidth (ie. its frequency range) are related via a <a href="https://en.wikipedia.org/wiki/Fourier_transform">Fourier transform</a>. In other words, the shorter the pulse, the larger its bandwidth and higher the number of laser modes that need to be supported by the laser cavity (A laser mode is defined as a spatial distribution of electromagnetic field in space with a distinct frequency and polarization). Having a large bandwidth is a necessary, but not a sufficient condition to generate a short pulse. This is where spectral phase comes in.
+							</p>
+							<p>
+							Each laser mode can be thought of as a separate continuous-wave laser with a sinusoidally varying amplitude and a distinct <a href="https://en.wikipedia.org/wiki/Phase_(waves)">phase</a>. At any given time, the total electric field of the laser is the sum of the fields of the individual modes. To generate a pulse at any given time, the electric fields of all laser modes need to add constructively such that the instantaneous field generated is large and the laser outputs a pulse of light. This process is called mode-locking [ref] and is achieved by adjusting the phases (ie. time delays) of the individual modes judiciously. To get the shortest pulse, the relative phase difference between any two laser modes should be directly proportional to the difference in their frequencies and the resulting pulse that is generated is called the transform-limited pulse. This phase described as a function of light frequency is called spectral phase.
+							</p>
+							<p >
+							More rigorously, spectral phase \(\phi(\omega)\) at an arbitrary frequency \(\omega\) may be defined with respect to the central frequency of the laser \(\omega_0\) in terms of a <a href="https://en.wikipedia.org/wiki/Taylor_series"> Taylor series</a> as follows: 
+							</p> 
+							<p class="equation">
+							$$\phi(\omega) = \phi(\omega_0) + \frac{d \phi}{d \omega} (\omega - \omega_0) + \frac{1}{2!} \frac{d^2 \phi}{d \omega^2} (\omega - \omega_0)^2 + \frac{1}{3!}\frac{d^3 \phi}{d \omega^3} (\omega - \omega_0)^3 + \ldots$$
+							</p>
+							<p>
+							Using this notation, a spectral phase of arbitrary complexity can be described. The first term on the right hand side shifts the overall phase of the pulse, while the second term results in a shift in the pulse location along the time axis (hence also called 'group delay'). Together, these terms have no effect on the pulse shape which remains transform-limited. The terms that are of interest to us, with respect to pulse-shaping, are the third, fourth and higher-order terms. For example, the third term is called the second-order or quadratic phase and will stretch the pulse in the time domain. The corresponding derivative is called second-order dispersion (sometimes called group-delay dispersion or GDD) and is usually expressed in terms of \(\mathrm{fs}^2\) which we will use here (other definitions are possible - see <a href="http://www.newport.com/The-Effect-of-Dispersion-on-Ultrashort-Pulses/602091/1033/content.aspx">this</a> great reference). Similarly, for the higher order terms we get cubic phase, quartic phase, etc. and the derivatives are accordingly third-order dispersion \((\mathrm{fs}^3)\), fourth-order dispersion \((\mathrm{fs}^4)\), etc. These higher-order phases will also distort the pulse in time in addition to lengthening its duration, as we will see below.
+							</p>
+							<p>
+							
+							</p>
+						</div>
+						<iframe  width="900px"  height="600px" marginwidth="0" marginheight="0" src="./translimit.html" kwframeid="1">
+						#document
+						</iframe>
+						<div>
+							<p id="reveal">
+							The interactive visualization above shows the electric field spectrum and time signature of a Gaussian pulse in normalized units. The reader is encouraged to adjust the bandwidth slider to see how the pulse changes in the wavelength and time domain.
+							</p>
+							<div id="header">
+								<h3>But therein lies a catch!</h3>
+							</div>
+							<p> Have you found the problem yet? You may have noticed that as you increase the bandwidth, the pulse width initially decreases as expected, but eventually it starts increasing again. What's going on here?
+							</p>
+							
+							<p> The simulation code was written to include a hidden spectral phase, which prevents the pulse from exhibiting transform-limited behaviour. Using the additional control sliders, the reader may externally compensate this built-in spectral phase to achieve the shortest (ie. transform-limited) pulse width. The program will let you know when you have hit the right balance. <a  onClick="this.innerHTML = '-2000 fs<sup>2</sup>, +10000 fs<sup>3</sup>'">Click here to reveal the hidden dispersion.</a> This also highlights an interesting phenomenon, that pulse broadening is a function of dispersion as well as the pulse bandwidth. The broader the spectrum, the more sensitive the pulse is to dispersion-induced stretching (see Eqn. 8 and Fig. 2 in the above mentioned <a href="http://www.newport.com/The-Effect-of-Dispersion-on-Ultrashort-Pulses/602091/1033/content.aspx">ref</a>). This tuning of spectral phase is thus, highly critical to achieving the shortest possible pulse width.
+							</p>
+							<p>
+							Where does this dispersion come from? Any time light travels through an optical medium that is not a perfect vacuum, we observe dispersion, because in any medium, different wavelengths (or frequencies, actually) travel at different speeds. This means that even if the phases of the individual modes were initially perfectly arranged, when they pass through a piece of glass such as a <a href="http://www.olympusmicro.com/primer/anatomy/objectives.html">microscope objective</a>, they get rearranged and are no longer proportional to their frequencies. This type of dispersion is called material dispersion and for visible frequencies the derivatives discussed above are almost always positive. For visible wavelengths, therefore, negative dispersion has to be generated by means of a spatial structure (eg. waveguides) or by geometric means as we will see below. Even before the light leaves the laser to encounter a piece of glass it encounters significant material dispersion from the gain medium, any transmissive optics such as lenses and even the length of air column that makes up the laser cavity. In a mode-locked laser, this spectral phase tuning or dispersion-compensation is achieved geometrically using a <a href="https://en.wikipedia.org/wiki/Prism_compressor">prism-pair</a> or <a href="http://dx.doi.org/10.1364/OL.9.000150">two</a>, or in some designs, it is achieved with special <a href="http://www.rp-photonics.com/chirped_mirrors.html">dispersion-compensating mirrors</a> in combination with barium fluoride (BaF<sub>2</sub>) wedge-pairs for fine-tuning [ref]. Outside the laser, tunable dispersion-compensation can be achieved using a device called a "pulse-shaper".
+							</p>
+							<img class="displayed"  src="./pulse_shaping_files/pulse-shaper.svg" alt="Pulse-shaper schematic" />
+							<p>
+							Typically, a pulse-shaper comprises of the following three elements: 1) a spatially dispersive element such as a grating that splits the light spatially into its constituent individual modes,  2) a collimating element such as a lens (or better, a concave mirror) that converts the spreading beam into a collimated beam, 3) actively tunable phase delay generator such as a linear array of liquid crystal based device called spatial light modulator (SLM). The light is then reflected back through the setup by a mirror to reconstitute the light pulse. Other designs exist as well that use acousto-optic modulators for generating frequency-dependent delays. By applying voltages of appropriate values to each pixel on the SLM, the phases for each frequency (or a group of closely spaced frequencies, depending on the optical resolution of the SLM) can be modified to compress a pulse to its transform-limited duration. For a detailed review of pulse-shaper geometries see this wonderful <a href="https://engineering.purdue.edu/~amw/Pulse_Shaping_Opt_Comm_2011.pdf">review article</a>. 
+							</p>
+							<p>
+							So, how much phase should one put on the pulse-shapers to recover transform-limited pulses? Various self-referenced techniques exist to measure spectral phase including <a href="https://www2.physics.ox.ac.uk/research/ultrafast-quantum-optics-and-optical-metrology/ultrafast-metrology/spider">SPIDER</a>, <a href="http://frog.gatech.edu/tutorial.html">FROG</a>, <a href="http://www.biophotonicsolutions.com/technology.php">MIIPS</a>, <a href="https://www.osapublishing.org/view_article.cfm?gotourl=https%3A%2F%2Fwww%2Eosapublishing%2Eorg%2FDirectPDFAccess%2F3D6276EF-F7AC-060E-90F41D58D9574243_226118%2Foe-20-1-688%2Epdf%3Fda%3D1%26id%3D226118%26seq%3D0%26mobile%3Dno&org=">d-scan</a> and their variants. Once the spectral phase is measured, the opposite phase can be projected on the SLM, resulting in a transform-limited pulse. But, pulse-shapers can do much more than generating transform-limited pulses. In fact, pulsed lasers are used for facilitating nonlinear optical interactions and pulse-shaping can be used to not only achieve transform-limited pulses, but also to either promote or disallow certain nonlinear interactions to achieve <a href="http://www.annualreviews.org/doi/abs/10.1146/annurev.physchem.040808.090427">coherent control</a> of light-mediated processes. To see how this is done, continue on to <a href="pulse-shaping-part2.html">part 2</a> of this tutorial.
+							</p>
+						</div>
+						<p>
+						This tutorial is authored by <a href="mailto:amarb@umich.edu">Amar Bhagwat</a> in HTML and Javascript and is powered by the data visualization library <a href=http://d3js.org/>D3.js</a> and the numerical calculation library <a href="http://www.numericjs.com/">Numeric Javascript</a>. The equations are typeset in <a href="https://www.mathjax.org/">MathJax</a>.
+						</p>
+					</div>
+					<div style="height: 2px; width: 892px;  height: 1px; left: 3px;  width: 892px; z-index: 1; " class="tinyText">
+						<div style="position: relative; width: 892px; ">
+						  <img src="pulse_shaping_files/shapeimage_2.jpg" alt="" style="height: 2px; left: 0px; margin-top: -1px; position: absolute; top: 0px; width: 892px; ">
+						</div>
+					</div>
+					<div id="id5" style="height: 48px; left: 3px;  width: 897px; z-index: 1; " class="style_SkipStroke_3 shape-with-text">
+						<div class="text-content graphic_textbox_layout_style_default_External_897_48" style="padding: 0px; ">
+						  <div class="graphic_textbox_layout_style_default">
+							<p style="padding-bottom: 0pt; padding-top: 0pt; " class="paragraph_style_3"><a title="http://www.umich.edu/" href="http://www.umich.edu/">University of Michigan</a>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp; <a title="http://www.lsa.umich.edu/physics" href="http://www.lsa.umich.edu/physics">Department of Physics</a>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp; <a title="http://www.umich.edu/~molbiop/" href="http://www.umich.edu/~molbiop/">Biophysics at Michigan</a></p>
+						  </div>
+						</div>
+					</div>
+				</div>
+				<div style="height: 100px; margin-left: 0px; position: relative; width: 900px; z-index: 15; " id="footer_layer">
+					<div style="height: 0px; line-height: 0px; " class="bumper">&nbsp;</div>
+				</div>
+			</div>
 		</div>
-		<div>
-			<p>
-			A broadband laser such as a mode-locked <a href="https://en.wikipedia.org/wiki/Ti-sapphire_laser"> Ti:Sapphire laser</a> can generate pulses that are as short as a few femtoseconds in duration. The pulse duration of the laser and the corresponding bandwidth of the pulse are related via a <a href="https://en.wikipedia.org/wiki/Fourier_transform">Fourier transform</a>. The shorter the pulse, the larger the bandwidth and higher the number of laser modes that need to be supported by the laser cavity (A laser mode is defined as a electromagnetic field distribution with a distinct frequency and polarization). Having a large bandwidth is necessary, but not sufficient to generate a short pulse. 
-			</p>
-			<p>
-			Each laser mode can be thought of as a separate continuous-wave laser with a distinct <a href="https://en.wikipedia.org/wiki/Phase_(waves)">phase</a>. To generate a pulse, the electric fields of all the laser modes need to add constructively such that the instantaneous field generated is large and the laser outputs a pulse of light. This process is called mode-locking[ref] and is achieved by adjusting the individual phases judiciously. To get the shortest pulse, the relative phase difference between any two laser modes should be linearly proportional to the difference in their frequencies and the resulting pulse that is generated is called the transform-limited pulse. This phase described as a function of light frequency is called spectral phase.
-			</p>
-			<p >
-			More rigorously, spectral phase \(\phi(\omega)\) at an arbitrary frequency \(\omega\) may be defined with respect to the central frequency \(\omega_0\) in terms of a <a href="https://en.wikipedia.org/wiki/Taylor_series"> Taylor series </a> as follows: 
-			</p> 
-			<p class="equation">
-			$$\phi(\omega) = \phi(\omega_0) + \frac{d \phi}{d \omega} (\omega - \omega_0) + \frac{1}{2!} \frac{d^2 \phi}{d \omega^2} (\omega - \omega_0)^2 + \frac{1}{3!}\frac{d^3 \phi}{d \omega^3} (\omega - \omega_0)^3 + \ldots$$
-			</p>
-			<p>
-			Using this notation, a spectral phase of arbitrary complexity can be described. The first term on the right hand side shifts the overall phase of the pulse, while the second term results in a shift in the pulse location along the time axis (hence also called 'group delay'). Together, these terms have no effect on the pulse width which remains transform-limited. The terms that are of interest to us, with respect to pulse-shaping, are the third, fourth and higher-order terms. For example, the third term is called the second-order or quadratic phase and will stretch the pulse in the time domain. The corresponding derivative is called second-order dispersion (and sometimes group-delay dispersion or GDD) and is usually expressed in terms of \(\mathrm{fs}^2\) which we will use here (other definitions are possible - see <a href="http://www.newport.com/The-Effect-of-Dispersion-on-Ultrashort-Pulses/602091/1033/content.aspx">here</a> for a great reference). Similarly, for the higher order terms we get cubic phase, quartic phase, etc. and the derivatives are accordingly third-order dispersion \((\mathrm{fs}^3)\), fourth-order dispersion \((\mathrm{fs}^4)\), etc. These higher-order phases will also distort the pulse in time in addition to lengthening its duration, as we will see below.
-			</p>
-		</div>
-		<iframe  width="900px"  height="600px" marginwidth="0" marginheight="0" src="./translimit.html" kwframeid="1">
-		#document
-		</iframe>
-		<div>
-			<p>
-			The interactive visualization above shows the electric field spectrum and time signature of a Gaussian transform-limited pulse in normalized units. The reader is encouraged to adjust the bandwidth slider to see how the pulse changes in the wavelength and time domain. 
-			</p>
-			
-			<p> But there's a catch! You may have noticed that as you increase the bandwidth, the pulse width initially decreases as expected, but eventually it starts increasing again. What's going on here?
-			</p>
-			
-			<p> The simulation code was written to include an additional spectral phase, which prevents the pulse from exhibiting transform-limited behaviour. Using the additional control sliders, the reader may externally compensate this built-in spectral phase to achieve the shortest (ie. transform-limited) pulse width. This also highlights an interesting phenomenon, that pulse broadening is a function of dispersion as well as the pulse bandwidth. The broader spectrum, the more sensitive the pulse is to dispersion-induced stretching (see Eqn. 8 and Fig. 2 in the above mentioned <a href="http://www.newport.com/The-Effect-of-Dispersion-on-Ultrashort-Pulses/602091/1033/content.aspx">ref</a>). This tuning of spectral phase is thus, highly critical to achieving the shortest possible pulse width. In a mode-locked laser, this spectral phase tuning or dispersion-compensation is achieved using a <a href="https://en.wikipedia.org/wiki/Prism_compressor">prism-pair<a> or <a href="http://dx.doi.org/10.1364/OL.9.000150">two</a>, or in some designs, it is achieved with <a href="http://www.rp-photonics.com/chirped_mirrors.html">dispersion-controlled mirrors</a> and barium fluoride (BaF<sub>2</sub>) wedge-pairs for fine-tuning. Dispersion-compensation can also be achieved external to the laser using a "pulse-shaper" [ref]. But, pulse-shapers can do much more than merely generating transform-limited pulses. In fact, pulsed lasers are used for facilitating nonlinear optical interactions and pulse-shaping can be used to not only achieve transform-limited pulses, but also to either promote or disallow certain nonlinear interactions to achieve coherent control [ref] of light-mediated processes.
-			</p>
-			<p>
-			In a nonlinear interaction such as two-photon absorption, which was employed in our recent fluorescence-resonance energy transfer (2P-FRET) microscopy experiment (read about it <a href="http://www.opticsinfobase.org/oe/abstract.cfm?uri=oe-23-3-3353">here</a>), two near-IR photons from the pulsed laser beam are absorbed to bridge an energy gap in a fluorescent protein and transfer an electron from the ground state manifold to an excited state. The protein eventually reverts back to the ground state and emits a visible photon as fluorescence, which is detected with sensitive detectors (such as photomultiplier tubes) to generate an image. During the absorption process, only the combined photon energies \(\hbar (\omega_1 + \omega_2)\) have to match the energy gap between the ground and excited states \(\hbar\omega_g\). Thus in addition to two photons of energy \(\hbar \omega/2\), any pair of photons (\(\hbar\omega_g/2-\delta,\hbar\omega_g/2+\delta\)) will do the trick, where \(\delta\) is some energy difference. In fact, for a broadband laser, all such photons participate in the absorption process and we can mathematically write the absorption \(TPA (\omega_g)\), at frequency \(\omega_g\) as :
-			</p>
-			<p class="equation">
-			$$ TPA(\omega_g) \propto \left\lvert \int_{-\infty}^{\infty} |E(\omega)| |E(\omega_g-\omega)| \mathrm{e}^{i(\phi(\omega)+\phi(\omega_g-\omega))} \mathrm{d}\omega \right\rvert^2 $$
-			</p>
-			<p>
-			where, \(E(\omega)\) and \(\phi(\omega)\) are the electric field and phase at frequency \(\omega\) respectively. Here, we start to see the power of being able to manipulate spectral phase. Each pair of frequencies \((\omega,\omega_g-\omega)\) contributes an absorption term proportional to the product of their electric fields. But, the absorption term also carries a phase equal to the sum of their original phases. The integral denotes that each such pair contributes to the absorption and the total absorption is equal to the sum of all such contributions. To get a better idea about the process, look at the visualization below:
-			</p>
-			
-		</div>
-		<iframe width="900px"  height = "600px" marginwidth="0" marginheight="0" src="./twophoton.html" kwframeid="1" >
-		#document
-		</iframe>
-		
-		<p>
-		On the left-hand side, the spectral field (blue) and the corresponding phase values (green) are approximated by 60 vertical bars. The black line  is the central frequency, defined as \(\omega_g/2\). On the right hand side, is a phasor diagram showing the magnitude(denoted by the length) and phase(denoted by the angle) of each contributing component of absorption (gray) and the resulting total absorption (orange). By hovering the mouse over the spectrum, each pair of contributing frequencies can be highlighted (red) and the contribution of that pair to the total absorption is highlighted on the right (red). A different central frequency may be selected by clicking the corresponding bar on the left. The reader is encouraged to explore the effect of shifting the phase offset on the total absorption. At what phase offsets is the absorption maximum? When is it minimum? 
-		</p>
-		<p>
-		Notice that a phase shape that is symmetric about the central frequency (eg. when phase offset is zero), the resulting absorption is at a minimum because a each absorption component has a different phase angle resulting in a spread. Whereas, when the phase shape is anti-symmetric, the absorption components all align along the same phase and the total absorption is at its maximum. Thus, if the individual absorption contributions can be arranged evenly about the unit circle, the total absorption can be entirely eliminated. This can be seen more easily when we switch to a random phase distribution. The phase distribution generated by a random function distributes the individual components such that on an average they cancel out. Because of the random nature of the distribution, the absorption may not cancel every time, but it tells us that by carefully choosing a (semi-random) distribution about a frequency \(\omega_g/2\), the absorption at frequency \(\omega_g\) can be eliminated, whereas having a constant or anti-symmetric phase can promote full absorption.
-		</p>
-		
-		<p>
-		Of course, arranging the phases for one particular frequency can give rise to unwanted features in absorption at other wavelengths. So, to achieve the results one wants, the spectral phase has to be designed taking into consideration the entire bandwidth and what particular absorption structure is desired. In the visualization below, an excitation pulse that is Gaussian in frequency is shown on the left. [talk about 640 pixel SLM] By combining the the principles of a flat phase promoting absorption and a random phase eliminating it, a phase function, designed such that it can let us select the part of spectrum over which absorption is to take place, is shown below it. On the right is the relative strength of the resulting two-photon absorption as a function of the wavelength - the higher the number, the better is the probability of exciting a fluorophore at that wavelength. Of course, the actual excitation also depends on the absorption strength of the fluorophore at that wavelength. This technique was first demonstrated as an application for selective second harmonic generation - read about it <a href ="https://www2.chemistry.msu.edu/faculty/dantus/publications/78.pdf">here</a>.
-		</p>
-		
-		<iframe frameborder="0" width="900px"  height = "650px" marginwidth="0" marginheight="0" scrolling="no" src="./pscalc_gauss.html" kwframeid="1" >
-		#document
-		</iframe>
-		<p>
-		This selective excitation is particularly useful when the user wants to excite a single fluorophore at a time out of many in a sample under consideration. This was demonstrated in a recent experiment in our group which you can read about <a href="http://www-personal.umich.edu/~jogilvie/Ogilvie_Group/Publications/Entries/2013/7/15_Two-photon_imaging_of_multiple_fluorescent_proteins_by_phase-shaping_and_linear_unmixing_with_a_single_broadband_laser.html">here</a>. By changing the position of the flat phase and its width, the absorption can be altered in milliseconds. By changing the width of the flat phase section and the center wavelength about which it is implemented, the reader can investigate the effect of the applied phase on the two-photon absorption probability or strength. Note that by changing the phase amplitude to 0, the user can get an idea of the full two-photon absorption of the excitation pulse.
-		</p>
-		<p>
-		Of course, this method works well when the spectrum is a perfect Gaussian and the frequency selection is quite broad. The reader will have realized that when the flat phase section is narrowed, the overall strength of two-photon absorption also decreases and that narrow selective excitation can be difficult with this technique. The visualization below is the same as the one above, but it implements the technique for a real broadband laser spectrum (as measured in our lab on the Venteon Pulse:One 6-fs Titanium Sapphire laser).
-		</p>
-		
-		<iframe frameborder="0" width="900px"  height = "650px" marginwidth="0" marginheight="0" scrolling="no" src="./pscalc_venteon.html" kwframeid="1" >
-		#document
-		</iframe>
-		<p>
-		In order to perform selective excitation over narrower regions, or to make more complicated selection structures such as multiple sections of two photon absorption, another technique is necessary. The problem is easier if only a narrow pump bandwidth is involved or one is concerned about a single excitation wavelength. But for a large bandwidth combined with a narrow selection, the phase applied needs to work out equally well over the whole bandwidth and it turns out to be an optimization problem with a large number of variables (n pixels and m levels of phases). One way to solve this problem is to implement a genetic algorithm with a target excitation function. It starts with a large population of phase masks (flat + random) described above and makes small changes to them in order to arrive at a more optimized solution. The successful implementation of this technique was essential to realizing our <a href="http://www.opticsinfobase.org/oe/abstract.cfm?uri=oe-23-3-3353"> 2P-FRET microscopy experiment</a>. 
-		</p>
-		
-		<p>
-		This tutorial is written in HTML and Javascript and is powered by the data visualization library <a href=http://d3js.org/>D3.js</a> and the numerical calculation library <a href="http://www.numericjs.com/">Numeric Javascript</a>. The beautiful equation typesetting was made possible by <a href="https://www.mathjax.org/">MathJax</a>.
-	</p>
-	</div>
-  </body>
+	</body>
 </html>
