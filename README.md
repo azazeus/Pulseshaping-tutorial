@@ -1,7 +1,7 @@
 # Pulseshaping-tutorial
 This repository hosts the source files for an interactive tutorial on pulse-shaping of few-femtosecond pulses. The actual tutorial is hosted here:
 
-https://rawgit.com/azazeus/Pulseshaping-tutorial/master/pulse-shaping-part1.html
+https://rawgit.com/azazeus/Pulseshaping-tutorial/master/
 
 The tutorial uses a javascript numerical computation library called [numericjs](https://github.com/sloisel/numeric/) written by Sébastien Loisel for performing the necessary numerical calculations for the user-interactive parts. 
 
